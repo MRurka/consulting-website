@@ -258,7 +258,6 @@ function WhatIDo() {
 /* ============ FEATURED CASE STUDY ============ */
 function FeaturedCaseStudy() {
   const t = useT();
-  const tags = ['cash', 'anon', 'consulting'];
   return (
     <section id="work">
       <div className="wrap">
@@ -294,11 +293,6 @@ function FeaturedCaseStudy() {
               <span>2022 — 2024</span>
             </div>
             <div style={{ position: 'relative' }}>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 22, flexWrap: 'wrap' }}>
-                {tags.map(k => (
-                  <span key={k} style={{ padding: '5px 10px', border: '1px solid rgba(244,241,236,0.3)', borderRadius: 999, fontSize: 11, fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('home.work.tag.' + k)}</span>
-                ))}
-              </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 28 }}>
                 <Stat big="266%" small={t('cs.stat.profit.label')} />
                 <Stat big="~99%" small={t('cs.stat.theft.label')} />
