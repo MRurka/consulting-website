@@ -4,7 +4,7 @@
    ================================================================= */
 
 /* ---------- Hero ---------- */
-function ServicesHero({ onTalk }) {
+function ServicesHero() {
   const t = useT();
   return (
     <section style={{ padding: 'clamp(140px, 16vh, 200px) 0 80px' }}>
@@ -111,7 +111,7 @@ function Philosophy() {
 }
 
 /* ---------- Engagement models ---------- */
-function Engagements({ onTalk }) {
+function Engagements() {
   const t = useT();
   const keys = ['consulting', 'retainer', 'equity'];
   return (
@@ -328,9 +328,9 @@ function ServicesAppRoot() {
     <>
       <NavBar onTalk={onTalk} lang={lang} setLang={setLang} current="services" />
       <main>
-        <ServicesHero onTalk={onTalk} />
+        <ServicesHero />
         <Philosophy />
-        <Engagements onTalk={onTalk} />
+        <Engagements />
         <Capabilities />
         <FitCheck />
         <ServicesClose onTalk={onTalk} />

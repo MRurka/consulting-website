@@ -15,37 +15,9 @@
   --serif: "Instrument Serif", "Fraunces", Georgia, serif;
   --sans: "Inter Tight", "Helvetica Neue", system-ui, sans-serif;
   --display: "Archivo", "Inter Tight", system-ui, sans-serif;
-  --display-narrow: "Archivo Narrow", "Archivo", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-}
-
-/* ACCENT presets — applied via [data-accent] on <html> */
-html[data-accent="forest"]  { --accent: #1f3d2a; --accent-ink: #f4f1ec; }
-html[data-accent="navy"]    { --accent: #0a2540; --accent-ink: #f4f1ec; }
-html[data-accent="orange"]  { --accent: #c14a1f; --accent-ink: #f4f1ec; }
-html[data-accent="ink"]     { --accent: #14110d; --accent-ink: #f4f1ec; }
-html[data-accent="cognac"]  { --accent: #7a4a2b; --accent-ink: #f4f1ec; }
-
-/* TYPE pairings — applied via [data-type] on <html> */
-html[data-type="editorial"] {
-  --display: "Archivo", "Inter Tight", system-ui, sans-serif;
   --display-weight: 800;
   --display-tracking: -0.035em;
-}
-html[data-type="serif-mix"] {
-  --display: "Fraunces", Georgia, serif;
-  --display-weight: 400;
-  --display-tracking: -0.03em;
-}
-html[data-type="quiet-sans"] {
-  --display: "Inter Tight", system-ui, sans-serif;
-  --display-weight: 600;
-  --display-tracking: -0.04em;
-}
-html[data-type="condensed"] {
-  --display: "Archivo Narrow", "Archivo", system-ui, sans-serif;
-  --display-weight: 700;
-  --display-tracking: -0.015em;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -115,7 +87,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .reveal[data-d="2"] { transition-delay: .16s; }
 .reveal[data-d="3"] { transition-delay: .24s; }
 .reveal[data-d="4"] { transition-delay: .32s; }
-.reveal[data-d="5"] { transition-delay: .40s; }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -175,7 +146,6 @@ section { padding: 110px 0; position: relative; }
   line-height: 0.94;
   text-wrap: balance;
 }
-html[data-type="serif-mix"] .h-display { line-height: 0.98; }
 
 .h-section {
   font-family: var(--display);
@@ -186,9 +156,3 @@ html[data-type="serif-mix"] .h-display { line-height: 0.98; }
   text-wrap: balance;
 }
 
-.body-lg {
-  font-size: clamp(18px, 1.4vw, 22px);
-  line-height: 1.45;
-  color: var(--ink-2);
-  max-width: 60ch;
-}
