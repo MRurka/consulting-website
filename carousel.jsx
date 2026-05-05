@@ -10,36 +10,9 @@
      ariaLabel    — region label for a11y.
 */
 
-const { useState: useStateMC, useEffect: useEffectMC, useRef: useRefMC, useCallback: useCallbackMC, useId: useIdMC } = React;
+const { useState: useStateMC, useEffect: useEffectMC, useRef: useRefMC, useId: useIdMC } = React;
 
 const MC_AUTO_MS = 10000;
-
-function useMCAutoAdvance({ index, onAdvance, durationMs }) {
-  const [progress, setProgress] = useStateMC(0);
-  const startRef = useRefMC(0);
-  const rafRef = useRefMC(0);
-  const reduced = useRefMC(false);
-
-  useEffectMC(() => {
-    reduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
-
-  useEffectMC(() => {
-    setProgress(0);
-    if (reduced.current) return;
-    startRef.current = performance.now();
-    const tick = (now) => {
-      const t = Math.min(1, (now - startRef.current) / durationMs);
-      setProgress(t);
-      if (t >= 1) onAdvance();
-      else rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [index, durationMs, onAdvance]);
-
-  return progress;
-}
 
 function defaultMCRenderItem(item) {
   return (
@@ -77,9 +50,6 @@ function MobileCarousel({
   ariaLabel,
 }) {
   const [index, setIndex] = useStateMC(0);
-  const advance = useCallbackMC(() => setIndex(i => (i + 1) % items.length), [items.length]);
-  const progress = useMCAutoAdvance({ index, onAdvance: advance, durationMs: autoMs });
-
   const next = () => setIndex((index + 1) % items.length);
   const prev = () => setIndex((index - 1 + items.length) % items.length);
 
@@ -88,6 +58,14 @@ function MobileCarousel({
   const programmaticRef = useRefMC(false);
   const debounceRef = useRefMC(0);
   const uid = useIdMC().replace(/:/g, '');
+
+  // Auto-advance via setTimeout (no per-frame state); CSS animation drives the
+  // active dot's fill. Skip when prefers-reduced-motion.
+  useEffectMC(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const tid = setTimeout(() => setIndex(i => (i + 1) % items.length), autoMs);
+    return () => clearTimeout(tid);
+  }, [index, autoMs, items.length]);
 
   useEffectMC(() => {
     const el = scrollerRef.current;
@@ -147,7 +125,8 @@ function MobileCarousel({
         gap: 16,
         marginTop: 20,
       }}>
-        {/* morph: gray dots → active bar with progress → black past dots */}
+        {/* morph: gray dots → active bar with progress → black past dots.
+           Active dot's inner fill is animated by CSS (key={index} restarts it). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 8 }}>
           {items.map((_, i) => {
             const isActive = i === index;
@@ -164,11 +143,8 @@ function MobileCarousel({
                 transition: 'flex 0.5s cubic-bezier(0.65, 0, 0.35, 1), background 0.4s',
               }}>
                 {isActive && (
-                  <div style={{
-                    position: 'absolute', left: 0, top: 0, bottom: 0,
-                    width: `${progress * 100}%`,
-                    background: 'var(--ink)',
-                    borderRadius: 999,
+                  <div key={index} className="mc-fill" style={{
+                    animationDuration: `${autoMs}ms`,
                   }}/>
                 )}
               </div>
@@ -196,6 +172,16 @@ function MobileCarousel({
           transition: border-color .2s, background .2s;
         }
         .mc-btn-sq:active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+        .mc-fill {
+          position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+          background: var(--ink); border-radius: 999px;
+          animation-name: mc-fill;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
+          animation-iteration-count: 1;
+        }
+        @keyframes mc-fill { from { width: 0; } to { width: 100%; } }
+        @media (prefers-reduced-motion: reduce) { .mc-fill { animation: none; width: 0; } }
       `}</style>
     </div>
   );

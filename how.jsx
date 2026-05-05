@@ -1,9 +1,7 @@
 /* "How" section — dark forest block */
 function HowSection() {
   const t = useT();
-  const now = new Date();
-  let yrs = now.getFullYear() - 2013;
-  if (now.getMonth() < 6) yrs -= 1;
+  const yrs = yearsSince(2013);
   return (
     <section style={{
       background: 'var(--accent, #1d3a2f)',

@@ -5,9 +5,7 @@
 /* ---------- Hero / consolidated bio ---------- */
 function AboutHero() {
   const t = useT();
-  const now = new Date();
-  let yrs = now.getFullYear() - 2013;
-  if (now.getMonth() < 6) yrs -= 1;
+  const yrs = yearsSince(2013);
   return (
     <section style={{ padding: 'clamp(140px, 16vh, 200px) 0 80px' }}>
       <div className="wrap">

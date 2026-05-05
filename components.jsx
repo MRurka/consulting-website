@@ -18,15 +18,24 @@ function useReveal() {
   }, []);
 }
 
-function useScrollY() {
-  const [y, setY] = useState(0);
+function useScrolledPast(threshold = 40) {
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setY(window.scrollY);
+    const onScroll = () => setScrolled(window.scrollY > threshold);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return y;
+  }, [threshold]);
+  return scrolled;
+}
+
+// Years from a start year to now, rounded down to the nearest mid-year.
+// Used in bio/lede copy ("12 years hands-on…"). Started June 2013.
+function yearsSince(startYear, startMonth = 6) {
+  const now = new Date();
+  let yrs = now.getFullYear() - startYear;
+  if (now.getMonth() < startMonth) yrs -= 1;
+  return yrs;
 }
 
 /* ============ LANG SWITCH ============ */
@@ -81,9 +90,8 @@ function LangSwitch({ lang, setLang, large = false }) {
 /* ============ NAV ============ */
 function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   const t = useT();
-  const y = useScrollY();
+  const scrolled = useScrolledPast(40);
   const [open, setOpen] = useState(false);
-  const scrolled = y > 40;
 
   // Cross-page nav: Services + About are top-level pages.
   // On home, "Michael Rurka" wordmark scrolls to top; on other pages it links home.
@@ -186,4 +194,4 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   );
 }
 
-Object.assign(window, { useReveal, useScrollY, NavBar, LangSwitch });
+Object.assign(window, { useReveal, useScrolledPast, yearsSince, NavBar, LangSwitch });
