@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Pre-commit hook — verifies i18n integrity before every commit.
+# Tracked in-repo; activate with `git config core.hooksPath .githooks`.
+#
+# Failure here blocks the commit. Fix the issues surfaced by check-i18n.js
+# (or, if EN values changed legitimately and FR has been re-translated,
+# run `node scripts/check-i18n.js --update-hashes` to baseline).
+
+set -e
+node "$(git rev-parse --show-toplevel)/scripts/check-i18n.js"

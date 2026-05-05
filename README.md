@@ -1,25 +1,63 @@
-# CODING AGENTS: READ THIS FIRST
+# michaelrurka.com
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Static consulting site. React + Babel-standalone over plain HTML pages
+(no build step, no `node_modules`). Five entry points: `index.html`,
+`about.html`, `services.html`, `book.html`, `case-study-company-x.html`.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Local development
 
-## What you should do — IMPORTANT
+Serve the directory with any static HTTP server:
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+```sh
+python3 -m http.server 8765
+# or any equivalent
+```
 
-**Read `project/index.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+Then open <http://localhost:8765/>.
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+## i18n
 
-## About the design files
+Site ships in English and French. Translation copy lives in
+`i18n/en.json` and `i18n/fr.json` (mirrored key sets). All UI text is
+wrapped in `t('key')` or `<T id="key" />` — see `CLAUDE.md` for the
+conventions.
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+`?lang=fr` deep-links select French; choice persists in `localStorage`.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+### One-time setup
 
-## Bundle contents
+This repo ships a tracked pre-commit hook that runs `scripts/check-i18n.js`
+to catch missing keys, untranslated strings, and stale FR translations
+**before** any commit lands. To activate it for your local clone:
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Consulting Website` project files (HTML prototypes, assets, components)
+```sh
+git config core.hooksPath .githooks
+```
+
+After that, every `git commit` runs the check automatically.
+
+### Translation workflow
+
+1. Edit copy in `i18n/en.json` (or wrap a new string in `t()`/`<T>`).
+2. Add the same key to `i18n/fr.json` — `"[FR] <english>"` placeholder
+   is fine if a real translation isn't ready, but the key MUST exist.
+3. Commit. The hook verifies parity.
+4. When Michael delivers translated FR copy, replace the `[FR] ...`
+   placeholders, then run:
+
+   ```sh
+   node scripts/check-i18n.js --update-hashes
+   ```
+
+   This re-baselines the EN-value hash file (`i18n/.en-hashes.json`),
+   which the staleness check uses to detect EN edits that need FR re-sync.
+
+Run the check ad-hoc with:
+
+```sh
+node scripts/check-i18n.js
+```
+
+## Deferred work
+
+See `debt.md`.

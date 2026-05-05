@@ -1,0 +1,15 @@
+# Substrings allowed to appear as literal text/attributes in JSX without going
+# through the i18n system. One per line. Commented lines (starting with #) and
+# blank lines ignored. Match is case-sensitive substring.
+#
+# Use sparingly — every entry weakens the safety net. Each addition should
+# be reviewed and justified in its commit message.
+
+# Brand name — wordmark. Same in EN and FR.
+Michael Rurka
+
+# Company logo aria-labels — proper nouns, identical across locales.
+Nurx
+HiringBranch
+RenoRun
+APM Montreal
