@@ -1,6 +1,7 @@
 /* App entry — composes everything */
 function App() {
   const { lang, setLang } = useLang();
+  usePageTitle('meta.home.title');
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };

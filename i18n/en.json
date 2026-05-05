@@ -7,6 +7,12 @@
 
   "lang.switch_to": "Switch to {lang}",
 
+  "meta.home.title": "Michael Rurka — Operator's growth partner.",
+  "meta.about.title": "About — Michael Rurka",
+  "meta.services.title": "Services — Michael Rurka",
+  "meta.book.title": "Book a free intro call — Michael Rurka",
+  "meta.cs.title": "Case study — A cash business that runs without its owner · Michael Rurka",
+
   "availability.same_year": "Available — {m1} & {m2} {year}",
   "availability.cross_year": "Available — {m1} {y1} & {m2} {y2}",
 

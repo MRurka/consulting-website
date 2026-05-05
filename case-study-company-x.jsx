@@ -452,6 +452,7 @@ function CSClose({ onTalk }) {
 /* ---------- Page App ---------- */
 function CaseStudyApp() {
   const { lang, setLang } = useLang();
+  usePageTitle('meta.cs.title');
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };

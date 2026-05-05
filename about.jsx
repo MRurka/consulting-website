@@ -169,6 +169,7 @@ function AboutClose({ onTalk }) {
 /* ---------- Page App ---------- */
 function AboutApp() {
   const { lang, setLang } = useLang();
+  usePageTitle('meta.about.title');
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };

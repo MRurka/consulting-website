@@ -22,6 +22,11 @@
     var lang = p.get('lang') || stored || (navigator.language||'').slice(0,2).toLowerCase();
     if (lang !== 'fr') lang = 'en';
     document.documentElement.lang = lang;
+    // Per-page title map — kept in sync with i18n/<lang>.json[meta.home.title].
+    // Inlined synchronously so FR deep-links don't flash the EN tab title.
+    // Update both this map and the JSON entry when changing copy.
+    var titles = { en: "Michael Rurka — Operator's growth partner.", fr: "[FR] Michael Rurka — Operator's growth partner." };
+    if (titles[lang]) document.title = titles[lang];
     window.__I18N_BOOT__ = {
       lang: lang,
       dictPromise: fetch('i18n/'+lang+'.json', { cache: 'no-cache' })

@@ -139,6 +139,16 @@ function useLang() {
   return { lang, setLang };
 }
 
+// Reactively set document.title from a dict key. Pass null to disable.
+function usePageTitle(key) {
+  const { dict } = i18nUseContext(I18nContext);
+  i18nUseEffect(() => {
+    if (!key || !dict) return;
+    const v = dict[key];
+    if (v) document.title = v;
+  }, [key, dict]);
+}
+
 /* ============ provider ============ */
 function I18nProvider({ children }) {
   const boot = (typeof window !== 'undefined' && window.__I18N_BOOT__) || { lang: 'en', dictPromise: loadDict('en') };
@@ -196,4 +206,4 @@ function I18nProvider({ children }) {
   );
 }
 
-Object.assign(window, { I18nProvider, useT, useLang, T, loadDict });
+Object.assign(window, { I18nProvider, useT, useLang, usePageTitle, T, loadDict });

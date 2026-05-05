@@ -319,6 +319,7 @@ function ServicesClose({ onTalk }) {
 /* ---------- Page App ---------- */
 function ServicesAppRoot() {
   const { lang, setLang } = useLang();
+  usePageTitle('meta.services.title');
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };

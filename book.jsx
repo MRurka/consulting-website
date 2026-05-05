@@ -85,6 +85,7 @@ function BookCalendar() {
 function BookApp() {
   useReveal();
   const { lang, setLang } = useLang();
+  usePageTitle('meta.book.title');
 
   // CTAs everywhere lead here. On this page, "Let's talk" buttons just scroll to the calendar.
   const onTalk = () => {

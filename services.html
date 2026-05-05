@@ -22,6 +22,8 @@
     var lang = p.get('lang') || stored || (navigator.language||'').slice(0,2).toLowerCase();
     if (lang !== 'fr') lang = 'en';
     document.documentElement.lang = lang;
+    var titles = { en: "Services — Michael Rurka", fr: "[FR] Services — Michael Rurka" };
+    if (titles[lang]) document.title = titles[lang];
     window.__I18N_BOOT__ = {
       lang: lang,
       dictPromise: fetch('i18n/'+lang+'.json', { cache: 'no-cache' })
