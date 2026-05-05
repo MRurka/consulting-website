@@ -199,6 +199,11 @@ window.HomeLogos = HomeLogos;
 function WhatIDo() {
   const t = useT();
   const keys = ['cx', 'ops', 'tech', 'growth'];
+  const carouselItems = keys.map((k, i) => ({
+    num: String(i + 1).padStart(2, '0'),
+    title: t('home.whatido.' + k + '.title'),
+    body: t('home.whatido.' + k + '.body'),
+  }));
   return (
     <section id="services" style={{ paddingBottom: 56 }}>
       <div className="wrap">
@@ -233,6 +238,7 @@ function WhatIDo() {
             </div>
           ))}
         </div>
+        <MobileCarousel items={carouselItems} ariaLabel={t('home.whatido.eyebrow')} />
         <div style={{ marginTop: 56, textAlign: 'center' }} className="reveal" data-d="3">
           <a href="services.html" className="btn btn--ghost" style={{ borderColor: 'var(--ink)', fontSize: 15 }}>
             {t('home.whatido.cta')} <span className="arr">→</span>
@@ -240,8 +246,7 @@ function WhatIDo() {
         </div>
         <style>{`
           @media (max-width: 720px) {
-            .services-grid { grid-template-columns: 1fr !important; }
-            .services-grid .service-card { border-right: none !important; padding: 32px 0 !important; }
+            .services-grid { display: none !important; }
           }
           .service-card:hover h3 { color: var(--accent); }
         `}</style>

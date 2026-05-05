@@ -5,6 +5,9 @@
   "nav.menu": "Menu",
   "nav.close": "Close",
 
+  "carousel.prev": "Previous",
+  "carousel.next": "Next",
+
   "lang.switch_to": "Switch to {lang}",
 
   "meta.home.title": "Michael Rurka — Operator's growth partner.",
