@@ -22,7 +22,7 @@
     var lang = p.get('lang') || stored || (navigator.language||'').slice(0,2).toLowerCase();
     if (lang !== 'fr') lang = 'en';
     document.documentElement.lang = lang;
-    var titles = { en: "Book a free intro call — Michael Rurka", fr: "[FR] Book a free intro call — Michael Rurka" };
+    var titles = { en: "Book a free intro call — Michael Rurka", fr: "Prenez un appel gratuit — Michael Rurka" };
     if (titles[lang]) document.title = titles[lang];
     window.__I18N_BOOT__ = {
       lang: lang,

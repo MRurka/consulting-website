@@ -175,7 +175,6 @@ function I18nProvider({ children }) {
       }
     });
     return () => { cancelled = true; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Switch locale: load dict, persist, update URL + <html lang>.
@@ -206,4 +205,4 @@ function I18nProvider({ children }) {
   );
 }
 
-Object.assign(window, { I18nProvider, useT, useLang, usePageTitle, T, loadDict });
+Object.assign(window, { I18nProvider, useT, useLang, usePageTitle, T });

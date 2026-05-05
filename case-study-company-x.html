@@ -22,7 +22,7 @@
     var lang = p.get('lang') || stored || (navigator.language||'').slice(0,2).toLowerCase();
     if (lang !== 'fr') lang = 'en';
     document.documentElement.lang = lang;
-    var titles = { en: "Case study — A cash business that runs without its owner · Michael Rurka", fr: "[FR] Case study — A cash business that runs without its owner · Michael Rurka" };
+    var titles = { en: "Case study — A cash business that runs without its owner · Michael Rurka", fr: "Étude de cas — Une business au comptant qui roule sans son propriétaire · Michael Rurka" };
     if (titles[lang]) document.title = titles[lang];
     window.__I18N_BOOT__ = {
       lang: lang,

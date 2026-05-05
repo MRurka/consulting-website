@@ -1,5 +1,4 @@
 /* Big sections — hero, marquee, services, case study, work grid, footer */
-const { useState: useStateS, useEffect: useEffectS, useRef: useRefS, useMemo: useMemoS } = React;
 
 function availabilityLabel(now = new Date(), lang = 'en', t = null) {
   const year = now.getFullYear();
@@ -339,50 +338,6 @@ function Stat({ big, small }) {
   );
 }
 
-/* ============ ABOUT STRIP ============ */
-function AboutStrip({ onTalk }) {
-  const t = useT();
-  const now = new Date();
-  let yrs = now.getFullYear() - 2013;
-  if (now.getMonth() < 6) yrs -= 1;
-  return (
-    <section id="about">
-      <div className="wrap">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'start' }} className="about-grid">
-          <div className="reveal" style={{ position: 'sticky', top: 120 }}>
-            <div className="eyebrow" style={{ marginBottom: 18 }}>{t('home.aboutstrip.eyebrow')}</div>
-            <h2 className="h-section" style={{ fontSize: 'clamp(40px, 5.2vw, 76px)', marginBottom: 32 }}>
-              <T id="home.aboutstrip.heading" />
-            </h2>
-            <button onClick={onTalk} className="btn btn--primary" style={{ fontSize: 15 }}>
-              {t('home.aboutstrip.cta')} <span className="arr">→</span>
-            </button>
-          </div>
-          <div>
-            <p className="reveal" style={{ fontSize: 'clamp(19px, 1.5vw, 24px)', lineHeight: 1.5, marginBottom: 40, color: 'var(--ink)', letterSpacing: '-0.005em' }}>
-              <T id="home.aboutstrip.p1" vars={{ n: yrs }} />
-            </p>
-            <p className="reveal" data-d="1" style={{ fontSize: 17, lineHeight: 1.6, color: 'var(--ink-2)', marginBottom: 20 }}>
-              {t('home.aboutstrip.p2')}
-            </p>
-            <p className="reveal" data-d="2" style={{ fontSize: 17, lineHeight: 1.6, color: 'var(--ink-2)', marginBottom: 0 }}>
-              {t('home.aboutstrip.p3')}
-            </p>
-          </div>
-        </div>
-        <style>{`
-          @media (max-width: 860px) {
-            .about-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-            .about-grid > div:first-child { position: static !important; }
-            .tl-row { grid-template-columns: 70px 1fr !important; grid-template-rows: auto auto; }
-            .tl-row > span:nth-child(3), .tl-row > span:nth-child(4) { grid-column: 2; text-align: left !important; font-size: 12px; }
-          }
-        `}</style>
-      </div>
-    </section>
-  );
-}
-
 /* ============ FOOTER ============ */
 function Footer({ onTalk, hideCta = false }) {
   const t = useT();
@@ -441,4 +396,4 @@ function Footer({ onTalk, hideCta = false }) {
   );
 }
 
-Object.assign(window, { Hero, Marquee, WhatIDo, FeaturedCaseStudy, AboutStrip, Footer });
+Object.assign(window, { Hero, WhatIDo, FeaturedCaseStudy, Footer });

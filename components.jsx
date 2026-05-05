@@ -29,27 +29,6 @@ function useScrollY() {
   return y;
 }
 
-function useActiveSection(ids) {
-  const [active, setActive] = useState(ids[0]);
-  useEffect(() => {
-    const onScroll = () => {
-      const probe = window.innerHeight * 0.35;
-      let current = ids[0];
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
-        if (r.top <= probe) current = id;
-      }
-      setActive(current);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [ids.join('|')]);
-  return active;
-}
-
 /* ============ LANG SWITCH ============ */
 function LangSwitch({ lang, setLang, large = false }) {
   const t = useT();
@@ -206,4 +185,4 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   );
 }
 
-Object.assign(window, { useReveal, useScrollY, useActiveSection, NavBar, LangSwitch });
+Object.assign(window, { useReveal, useScrollY, NavBar, LangSwitch });
