@@ -1,6 +1,14 @@
 /* =============================================================
    michaelrurka.com — shared base styles
-   Loaded by index.html (home), about.html, services.html
+   Loaded by every page.
+
+   Breakpoints:
+     720px — content/grid mobile collapse (services grid, foot-grid,
+             carousel gating, .wrap padding tightening)
+     860px — nav layout mobile (hamburger + overlay menu)
+   These two values appear inline in JSX media queries; keep them
+   in sync with this convention. CSS spec doesn't allow custom
+   properties inside @media queries, so the values are repeated.
    ============================================================= */
 
 :root {

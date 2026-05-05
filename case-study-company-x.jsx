@@ -253,9 +253,7 @@ function CSTimeline() {
                 <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 'clamp(48px, 6vw, 84px)', letterSpacing: '-0.05em', lineHeight: 0.85, color: 'var(--accent)' }}>
                   0{i + 1}
                 </span>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--ink-3)' }}>
-                  {t('cs.timeline.' + k + '.tag')}
-                </span>
+                <span className="eyebrow">{t('cs.timeline.' + k + '.tag')}</span>
               </div>
               <div className="cs-phase-body">
                 <h3 style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 'clamp(26px, 2.6vw, 38px)', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: 18, textWrap: 'balance' }}>
@@ -319,7 +317,7 @@ function CSCapabilities() {
           {keys.map((k, i) => (
             <div key={k} className="cs-surface reveal" data-d={(i % 3) + 1}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 22 }}>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{String(i + 1).padStart(2, '0')}</span>
+                <span className="eyebrow">{String(i + 1).padStart(2, '0')}</span>
                 <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }} />
               </div>
               <h3 style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: 'clamp(20px, 1.7vw, 26px)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 12, textWrap: 'balance' }}>
