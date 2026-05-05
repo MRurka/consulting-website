@@ -128,7 +128,7 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
             </button>
           </nav>
 
-          <button className="hamburger" aria-label={t('nav.menu')} onClick={() => setOpen(true)}
+          <button className="hamburger" aria-label={t('nav.menu')} aria-expanded={open} aria-controls="mobile-nav" onClick={() => setOpen(true)}
             style={{ display: 'none', width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
             <svg width="22" height="14" viewBox="0 0 22 14" fill="none">
               <path d="M0 1h22M0 13h22" stroke="currentColor" strokeWidth="1.5" />
@@ -138,12 +138,13 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
       </header>
 
       {/* Mobile overlay */}
-      <div style={{
+      <div id="mobile-nav" role="dialog" aria-modal="true" aria-hidden={!open} style={{
         position: 'fixed', inset: 0, zIndex: 80,
         background: 'var(--bg)',
         transform: open ? 'translateY(0)' : 'translateY(-101%)',
         transition: 'transform .55s cubic-bezier(.7,0,.2,1)',
         display: 'flex', flexDirection: 'column',
+        visibility: open ? 'visible' : 'hidden',
       }}>
         <div className="wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 22px' }}>
           <span style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18 }}>

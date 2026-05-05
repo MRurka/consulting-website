@@ -73,7 +73,6 @@ function BookCalendar() {
             title={t('book.cal.iframe_title')}
             src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2gfDwN6nPv36opTNXaDrt6q1ItuiCqmxtGV5h9W7PNL6MawPVxdmN5zf0Pv1KtoRIRS4aQNu-h?gv=true"
             style={{ border: 0, width: '100%', height: 720, background: '#fff', borderRadius: 2 }}
-            frameBorder="0"
           />
         </div>
       </div>

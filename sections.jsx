@@ -379,11 +379,11 @@ function Footer({ onTalk, hideCta = false }) {
             <div className="eyebrow" style={{ color: 'rgba(244,241,236,0.4)', marginBottom: 14 }}>{t('footer.col.reach')}</div>
             <ul style={{ listStyle: 'none', display: 'grid', gap: 8 }}>
               <li><a href="mailto:michaelrurka91@gmail.com" style={{ color: 'rgba(244,241,236,0.85)' }}>michaelrurka91@gmail.com</a></li>
-              <li><a href="#" style={{ color: 'rgba(244,241,236,0.85)' }}>{t('footer.linkedin')}</a></li>
+              <li><a href="https://www.linkedin.com/in/michaelrurka/" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(244,241,236,0.85)' }}>{t('footer.linkedin')}</a></li>
             </ul>
           </div>
           <div style={{ fontFamily: 'var(--mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(244,241,236,0.45)', textAlign: 'right' }}>
-            <div>© {new Date().getFullYear()}</div>
+            <div>© {new Date().getFullYear()} Michael Rurka</div>
             <div style={{ marginTop: 4 }}>{t('footer.location')}</div>
           </div>
         </div>
