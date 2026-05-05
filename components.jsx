@@ -51,11 +51,10 @@ function useActiveSection(ids) {
 }
 
 /* ============ LANG SWITCH ============ */
-function LangSwitch({ lang, setLang, variant = 'minimal', large = false }) {
-  const isEn = lang === 'en';
-  const other = isEn ? 'fr' : 'en';
+function LangSwitch({ lang, setLang, large = false }) {
+  const other = lang === 'en' ? 'fr' : 'en';
 
-  // Mobile overlay version is always large + segmented, regardless of variant
+  // Mobile overlay version
   if (large) {
     return (
       <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
@@ -76,107 +75,30 @@ function LangSwitch({ lang, setLang, variant = 'minimal', large = false }) {
     );
   }
 
-  const baseMono = { fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase' };
-
-  // 1. Minimal text — "EN · fr" inline, no chrome
-  if (variant === 'minimal') {
-    return (
-      <div role="group" aria-label="Language" style={{ ...baseMono, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-        {['en','fr'].map((l, i) => (
-          <React.Fragment key={l}>
-            {i > 0 && <span aria-hidden style={{ opacity: 0.3 }}>·</span>}
-            <button onClick={() => setLang(l)} style={{
-              padding: 0, color: 'inherit',
-              opacity: lang === l ? 1 : 0.45,
-              fontWeight: lang === l ? 600 : 400,
-              transition: 'opacity .2s',
-            }}>{l.toUpperCase()}</button>
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
-
-  // 2. Toggle pill — segmented, soft fill on active
-  if (variant === 'segmented') {
-    return (
-      <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
-        display: 'inline-flex', alignItems: 'center',
-        background: 'rgba(125,125,125,0.14)', borderRadius: 999, padding: 3,
-        ...baseMono, color: 'inherit', cursor: 'pointer',
-      }}>
-        {['en','fr'].map(l => (
-          <span key={l} style={{
-            padding: '6px 12px', borderRadius: 999, fontWeight: 600,
-            background: lang === l ? 'var(--bg)' : 'transparent',
-            color: 'inherit',
-            opacity: lang === l ? 1 : 0.6,
-            transition: 'background .25s, opacity .25s',
-            minWidth: 32, textAlign: 'center',
-          }}>{l.toUpperCase()}</span>
-        ))}
-      </button>
-    );
-  }
-
-  // 3. Globe + current — globe icon and current code, click to swap
-  if (variant === 'globe') {
-    return (
-      <button onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
-        ...baseMono, display: 'inline-flex', alignItems: 'center', gap: 8,
-        padding: '6px 4px', color: 'inherit', opacity: 0.85,
-        transition: 'opacity .2s',
-      }}
-      onMouseEnter={e => { e.currentTarget.style.opacity = 1; }}
-      onMouseLeave={e => { e.currentTarget.style.opacity = 0.85; }}>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-          <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1"/>
-          <path d="M7 1c2 1.5 2 10.5 0 12M7 1c-2 1.5-2 10.5 0 12M1 7h12" stroke="currentColor" strokeWidth="1"/>
-        </svg>
-        <span style={{ fontWeight: 600 }}>{lang.toUpperCase()}</span>
-      </button>
-    );
-  }
-
-  // 4. Slash — "EN/FR" with active one underlined
-  if (variant === 'slash') {
-    return (
-      <div role="group" aria-label="Language" style={{ ...baseMono, display: 'inline-flex', alignItems: 'baseline', gap: 0 }}>
-        {['en','fr'].map((l, i) => (
-          <React.Fragment key={l}>
-            {i > 0 && <span aria-hidden style={{ opacity: 0.35, padding: '0 4px' }}>/</span>}
-            <button onClick={() => setLang(l)} style={{
-              padding: '2px 0', color: 'inherit',
-              opacity: lang === l ? 1 : 0.5,
-              fontWeight: lang === l ? 600 : 400,
-              borderBottom: lang === l ? '1.5px solid currentColor' : '1.5px solid transparent',
-              transition: 'opacity .2s, border-color .2s',
-            }}>{l.toUpperCase()}</button>
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
-
-  // 5. Dot — current code, dot indicator, click swaps
-  if (variant === 'dot') {
-    return (
-      <button onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
-        ...baseMono, display: 'inline-flex', alignItems: 'center', gap: 8,
-        padding: '6px 0', color: 'inherit',
-      }}>
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }}/>
-        <span style={{ fontWeight: 600 }}>{lang.toUpperCase()}</span>
-        <span style={{ opacity: 0.4 }}>↔ {other.toUpperCase()}</span>
-      </button>
-    );
-  }
-
-  return null;
+  // Default: segmented pill
+  return (
+    <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
+      display: 'inline-flex', alignItems: 'center',
+      background: 'rgba(125,125,125,0.14)', borderRadius: 999, padding: 3,
+      fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase',
+      color: 'inherit', cursor: 'pointer',
+    }}>
+      {['en','fr'].map(l => (
+        <span key={l} style={{
+          padding: '6px 12px', borderRadius: 999, fontWeight: 600,
+          background: lang === l ? 'var(--bg)' : 'transparent',
+          color: 'inherit',
+          opacity: lang === l ? 1 : 0.6,
+          transition: 'background .25s, opacity .25s',
+          minWidth: 32, textAlign: 'center',
+        }}>{l.toUpperCase()}</span>
+      ))}
+    </button>
+  );
 }
 
 /* ============ NAV ============ */
-function NavBar({ onTalk, lang, setLang, langStyle, current = 'home' }) {
+function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   const y = useScrollY();
   const [open, setOpen] = useState(false);
   const scrolled = y > 40;
@@ -218,7 +140,7 @@ function NavBar({ onTalk, lang, setLang, langStyle, current = 'home' }) {
             {links.map(l => (
               <a key={l.key} href={l.href} className={`nav-a ${current === l.key ? 'is-current' : ''}`}>{l.label}</a>
             ))}
-            <LangSwitch lang={lang} setLang={setLang} variant={langStyle} />
+            <LangSwitch lang={lang} setLang={setLang} />
             <button onClick={onTalk} className="btn btn--primary" style={{ padding: '11px 20px', fontSize: 14 }}>
               Let's talk <span className="arr">→</span>
             </button>

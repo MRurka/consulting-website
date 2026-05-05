@@ -58,7 +58,7 @@ function CSHero() {
 
 
 /* ---------- Headline stats — framed section ---------- */
-function CSStats({ variant = 'panel' }) {
+function CSStats() {
   const stats = [
     { big: '266%', label: 'YoY gross profit growth', sub: 'Profit, not revenue. Year one.' },
     { big: '~99%', label: 'Reduction in theft',      sub: 'Once everything was tracked.' },
@@ -66,147 +66,47 @@ function CSStats({ variant = 'panel' }) {
     { big: '6 mo', label: 'Owner can be away',       sub: 'Without service degrading.' },
   ];
 
-  // --- Variant A: 'panel' — wrap stats in a soft accent panel with own label
-  if (variant === 'panel') {
-    return (
-      <section style={{ padding: '60px 0 110px' }}>
-        <div className="wrap">
-          <div className="reveal cs-stats-panel" data-d="1">
-            <div className="cs-stats-panel-header">
-              <div className="eyebrow" style={{ color: 'var(--accent)' }}>What changed</div>
-            </div>
-            <div className="cs-stats-grid">
-              {stats.map((s, i) => (
-                <div key={i} className="cs-stat">
-                  <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 'clamp(40px, 4.6vw, 68px)', letterSpacing: '-0.04em', lineHeight: 0.9, color: 'var(--accent)', marginBottom: 14 }}>{s.big}</div>
-                  <div style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: 'clamp(15px, 1.2vw, 18px)', letterSpacing: '-0.01em', lineHeight: 1.3, marginBottom: 6 }}>{s.label}</div>
-                  <div style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.45 }}>{s.sub}</div>
-                </div>
-              ))}
-            </div>
+  return (
+    <section style={{ padding: '60px 0 110px' }}>
+      <div className="wrap">
+        <div className="reveal cs-stats-panel" data-d="1">
+          <div className="cs-stats-panel-header">
+            <div className="eyebrow" style={{ color: 'var(--accent)' }}>What changed</div>
           </div>
-          <style>{`
-            .cs-stats-panel {
-              background: var(--bg-2);
-              border-radius: 10px;
-              padding: 44px clamp(24px, 4vw, 56px) 48px;
-              border-top: 3px solid var(--accent);
-            }
-            .cs-stats-panel-header {
-              display: flex;
-              align-items: center;
-              gap: 24px;
-              margin-bottom: 32px;
-            }
-            .cs-stats-grid {
-              display: grid;
-              grid-template-columns: repeat(4, 1fr);
-              gap: 40px 36px;
-            }
-            @media (max-width: 860px) {
-              .cs-stats-panel-header { flex-direction: column; align-items: flex-start; }
-              .cs-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
-            }
-            @media (max-width: 480px) {
-              .cs-stats-grid { grid-template-columns: 1fr; }
-            }
-          `}</style>
-        </div>
-      </section>
-    );
-  }
-
-  // --- Variant B: 'titled' — section title above stats grid (in flow, no panel)
-  if (variant === 'titled') {
-    return (
-      <section style={{ padding: '20px 0 110px' }}>
-        <div className="wrap">
-          <div className="reveal cs-titled-header" data-d="1">
-            <div>
-              <div className="eyebrow" style={{ color: 'var(--accent)', marginBottom: 14 }}>The outcome</div>
-              <h2 className="h-section" style={{ fontSize: 'clamp(32px, 4vw, 52px)', maxWidth: '20ch', lineHeight: 1.05 }}>
-                What changed,<br/>by the numbers.
-              </h2>
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--ink-3)', maxWidth: '32ch', lineHeight: 1.55 }}>
-              Two years in. Same owner, same customers, same town — different business underneath.
-            </div>
-          </div>
-          <div className="cs-stats reveal" data-d="2">
+          <div className="cs-stats-grid">
             {stats.map((s, i) => (
               <div key={i} className="cs-stat">
-                <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 'clamp(44px, 5vw, 76px)', letterSpacing: '-0.04em', lineHeight: 0.9, color: 'var(--accent)', marginBottom: 16, whiteSpace: 'nowrap' }}>{s.big}</div>
-                <div style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: 'clamp(16px, 1.3vw, 19px)', letterSpacing: '-0.01em', lineHeight: 1.3, marginBottom: 6 }}>{s.label}</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 'clamp(40px, 4.6vw, 68px)', letterSpacing: '-0.04em', lineHeight: 0.9, color: 'var(--accent)', marginBottom: 14 }}>{s.big}</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: 'clamp(15px, 1.2vw, 18px)', letterSpacing: '-0.01em', lineHeight: 1.3, marginBottom: 6 }}>{s.label}</div>
                 <div style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.45 }}>{s.sub}</div>
               </div>
             ))}
           </div>
-          <style>{`
-            .cs-titled-header {
-              display: grid;
-              grid-template-columns: 1.4fr 1fr;
-              gap: 48px;
-              align-items: end;
-              margin-bottom: 56px;
-              padding-bottom: 32px;
-              border-bottom: 1px solid var(--line);
-            }
-            .cs-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
-            .cs-stat { padding: 4px 28px 4px 0; border-right: 1px solid var(--line); }
-            .cs-stat:first-child { padding-left: 0; }
-            .cs-stat:nth-child(n+2) { padding-left: 28px; }
-            .cs-stat:last-child { border-right: none; padding-right: 0; }
-            @media (max-width: 860px) {
-              .cs-titled-header { grid-template-columns: 1fr; gap: 16px; }
-              .cs-stats { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
-              .cs-stat { padding: 0 !important; border-right: none; }
-            }
-            @media (max-width: 480px) { .cs-stats { grid-template-columns: 1fr; } }
-          `}</style>
-        </div>
-      </section>
-    );
-  }
-
-  // --- Variant C: 'minimal' — just an eyebrow label tagging the row
-  return (
-    <section style={{ padding: '20px 0 110px' }}>
-      <div className="wrap">
-        <div className="reveal" data-d="1" style={{ marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24 }}>
-          <div className="eyebrow" style={{ color: 'var(--accent)' }}>↳ Outcomes — by year two</div>
-          <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>4 metrics</div>
-        </div>
-        <div className="cs-stats reveal" data-d="2">
-          {stats.map((s, i) => (
-            <div key={i} className="cs-stat">
-              <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 'clamp(44px, 5vw, 76px)', letterSpacing: '-0.04em', lineHeight: 0.9, color: 'var(--accent)', marginBottom: 16, whiteSpace: 'nowrap' }}>{s.big}</div>
-              <div style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: 'clamp(16px, 1.3vw, 19px)', letterSpacing: '-0.01em', lineHeight: 1.3, marginBottom: 6 }}>{s.label}</div>
-              <div style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.45 }}>{s.sub}</div>
-            </div>
-          ))}
         </div>
         <style>{`
-          .cs-stats {
+          .cs-stats-panel {
+            background: var(--bg-2);
+            border-radius: 10px;
+            padding: 44px clamp(24px, 4vw, 56px) 48px;
+            border-top: 3px solid var(--accent);
+          }
+          .cs-stats-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+          }
+          .cs-stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            border-top: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
+            gap: 40px 36px;
           }
-          .cs-stat {
-            padding: 36px 28px 32px;
-            border-right: 1px solid var(--line);
-          }
-          .cs-stat:last-child { border-right: none; }
           @media (max-width: 860px) {
-            .cs-stats { grid-template-columns: repeat(2, 1fr); }
-            .cs-stat { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-            .cs-stat:nth-child(2n) { border-right: none; }
-            .cs-stat:nth-last-child(-n+2) { border-bottom: none; }
+            .cs-stats-panel-header { flex-direction: column; align-items: flex-start; }
+            .cs-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
           }
           @media (max-width: 480px) {
-            .cs-stats { grid-template-columns: 1fr; }
-            .cs-stat { border-right: none !important; border-bottom: 1px solid var(--line); }
-            .cs-stat:last-child { border-bottom: none; }
+            .cs-stats-grid { grid-template-columns: 1fr; }
           }
         `}</style>
       </div>
@@ -580,8 +480,6 @@ function CSClose({ onTalk }) {
 
 /* ---------- Page App ---------- */
 function CaseStudyApp() {
-  const TWEAK_DEFAULTS = window.__TWEAKS__ || { accent: 'forest', typePairing: 'editorial', langStyle: 'segmented', statsLayout: 'panel' };
-  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [lang, setLang] = useStateCS(() => {
     try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
   });
@@ -591,19 +489,14 @@ function CaseStudyApp() {
   }, [lang]);
   useReveal();
 
-  useEffectCS(() => {
-    document.documentElement.dataset.accent = tweaks.accent || 'forest';
-    document.documentElement.dataset.type = tweaks.typePairing || 'editorial';
-  }, [tweaks.accent, tweaks.typePairing]);
-
   const onTalk = () => { window.location.href = 'book.html'; };
 
   return (
     <>
-      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} langStyle={tweaks.langStyle || 'segmented'} current="" />
+      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} current="" />
       <main>
         <CSHero />
-        <CSStats variant={tweaks.statsLayout || 'panel'} />
+        <CSStats />
         <CSStart />
         <CSWhyCustom />
         <CSTimeline />
@@ -612,40 +505,6 @@ function CaseStudyApp() {
         <CSClose onTalk={onTalk} />
       </main>
       <Footer onTalk={onTalk} />
-
-      <TweaksPanel title="Tweaks">
-        <TweakSection label="Outcomes section">
-          <TweakRadio label="Layout"
-            value={tweaks.statsLayout || 'panel'}
-            onChange={v => setTweak('statsLayout', v)}
-            options={[
-              { value: 'panel', label: 'A · Soft panel + label' },
-              { value: 'titled', label: 'B · Titled section' },
-              { value: 'minimal', label: 'C · Minimal eyebrow' },
-            ]} />
-        </TweakSection>
-        <TweakSection label="Style">
-          <TweakSelect label="Accent color"
-            value={tweaks.accent || 'forest'}
-            onChange={v => setTweak('accent', v)}
-            options={[
-              { value: 'forest', label: 'Forest green' },
-              { value: 'navy', label: 'Deep navy' },
-              { value: 'orange', label: 'Burnt orange' },
-              { value: 'ink', label: 'Off-black' },
-              { value: 'cognac', label: 'Warm cognac' },
-            ]} />
-          <TweakSelect label="Type pairing"
-            value={tweaks.typePairing || 'editorial'}
-            onChange={v => setTweak('typePairing', v)}
-            options={[
-              { value: 'editorial', label: 'Editorial · Archivo' },
-              { value: 'serif-mix', label: 'Serif · Fraunces' },
-              { value: 'quiet-sans', label: 'Quiet · Inter Tight' },
-              { value: 'condensed', label: 'Condensed · Archivo Narrow' },
-            ]} />
-        </TweakSection>
-      </TweaksPanel>
     </>
   );
 }

@@ -101,7 +101,7 @@ function BookApp() {
 
   return (
     <>
-      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} langStyle={(window.__TWEAKS__ || {}).langStyle || 'segmented'} current="book" />
+      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} current="book" />
       <main>
         <BookHero />
         <BookCalendar />

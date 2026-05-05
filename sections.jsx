@@ -1,4 +1,4 @@
-/* Big sections — hero, marquee, services, calculator, case study, work grid, footer */
+/* Big sections — hero, marquee, services, case study, work grid, footer */
 const { useState: useStateS, useEffect: useEffectS, useRef: useRefS, useMemo: useMemoS } = React;
 
 function availabilityLabel(now = new Date()) {
@@ -16,15 +16,8 @@ function availabilityLabel(now = new Date()) {
 }
 
 /* ============ HERO ============ */
-function Hero({ tweaks, onTalk, scrollY }) {
-  const h1Map = {
-    D1: <>Scalable operations<br/>and growth strategy<br/>for owner-led<br/>businesses in Canada.</>,
-    D2: <>Helping Canadian<br/>operators scale<br/>what's already<br/>working.</>,
-    D3: <>You've built a real business.<br/><em style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>Now what?</em></>,
-  };
-
-  const layout = tweaks.heroLayout;
-  const yIn = scrollY * 0.18;
+function Hero({ onTalk }) {
+  const h1 = <>You've built a real business.<br/><em style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>Now what?</em></>;
 
   // Hold the hero invisible until the portrait + fonts are decoded, then fade the whole section in.
   const [heroReady, setHeroReady] = React.useState(false);
@@ -40,180 +33,48 @@ function Hero({ tweaks, onTalk, scrollY }) {
       if (!cancelled) requestAnimationFrame(() => setHeroReady(true));
     });
     return () => { cancelled = true; };
-  }, [layout]);
+  }, []);
 
   const heroFade = {
     opacity: heroReady ? 1 : 0,
     transition: 'opacity 0.7s cubic-bezier(.2,.7,.2,1)',
   };
 
-  if (layout === 'fullbleed') {
-    return (
-      <section id="top" style={{
-        minHeight: '100vh',
-        position: 'relative',
-        padding: 0,
-        overflow: 'hidden',
-        color: '#f4f1ec',
-        ['--nav-ink']: '#f4f1ec',
-        ...heroFade,
-      }}>
-        {/* Image */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(assets/michael.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: '70% 30%',
-          transform: `translateY(${yIn}px) scale(1.06)`,
-          willChange: 'transform',
-          filter: 'saturate(0.85) contrast(1.02)',
-        }}/>
-        {/* Overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(180deg, rgba(20,17,13,0.55) 0%, rgba(20,17,13,0.25) 28%, rgba(20,17,13,0.15) 55%, rgba(20,17,13,0.85) 100%)',
-        }}/>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(90deg, rgba(20,17,13,0.45) 0%, rgba(20,17,13,0.0) 55%)',
-        }}/>
-
-        {/* Foreground content */}
-        <div className="wrap" style={{
-          position: 'relative', zIndex: 2,
-          minHeight: '100vh',
-          display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-          paddingTop: 140, paddingBottom: 64,
-        }}>
-          <div className="reveal in" style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-            <span className="live-dot" aria-hidden/>
-            <span className="eyebrow" style={{ color: 'rgba(244,241,236,0.85)' }}>{availabilityLabel()}</span>
-          </div>
-
-          <h1 className="h-display reveal in" style={{
-            fontSize: 'clamp(48px, 8.4vw, 130px)',
-            maxWidth: '16ch',
-            color: '#f4f1ec',
-          }}>
-            {h1Map[tweaks.h1Variant] || h1Map.D1}
-          </h1>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1.1fr auto',
-            gap: 48, alignItems: 'end',
-            marginTop: 28,
-          }} className="hero-foot">
-            <p style={{ fontSize: 'clamp(24px, 2.2vw, 32px)', maxWidth: '44ch', color: 'rgba(244,241,236,0.9)', lineHeight: 1.4, fontFamily: 'var(--display)', fontWeight: 400, letterSpacing: '-0.01em' }}>
-              Grow it, streamline it, or finally step back from it. Whatever the move is, I can help you get there. Through consulting, retainers, or equity partnerships — whatever the fit calls for.
-            </p>
-            <button onClick={onTalk} className="btn btn--primary" style={{ fontSize: 16, padding: '18px 28px', justifySelf: 'end' }}>
-              Book a free intro call <span className="arr">→</span>
-            </button>
-          </div>
-
-          {/* Bottom meta strip */}
-          <div style={{
-            marginTop: 64,
-            paddingTop: 24,
-            borderTop: '1px solid rgba(244,241,236,0.18)',
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            fontSize: 12, fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.12em',
-            color: 'rgba(244,241,236,0.7)',
-          }} className="hero-meta">
-            <span>Based in Montreal · Working across Canada and Latin America</span>
-            <span>(01 / Independent operator-investor)</span>
-            <span>↓ Scroll</span>
-          </div>
-        </div>
-
-        <style>{`
-          @media (max-width: 720px) {
-            .hero-foot { grid-template-columns: 1fr !important; gap: 28px !important; }
-            .hero-foot .btn { justify-self: start !important; }
-            .hero-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
-          }
-        `}</style>
-      </section>
-    );
-  }
-
-  if (layout === 'split') {
-    return (
-      <section id="top" style={{ paddingTop: 140, paddingBottom: 80, position: 'relative', ...heroFade }}>
-        <div className="wrap hero-split" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.9fr', gap: 64, alignItems: 'stretch' }} >
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div className="reveal in" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
-              <span className="live-dot" aria-hidden/>
-              <span className="eyebrow">{availabilityLabel()}</span>
-            </div>
-            <h1 className="h-display reveal in" style={{ fontSize: 'clamp(44px, 6.8vw, 104px)' }}>
-              {h1Map[tweaks.h1Variant] || h1Map.D1}
-            </h1>
-            <div style={{ marginTop: 48 }}>
-              <p style={{ fontSize: 'clamp(22px, 1.9vw, 28px)', maxWidth: '40ch', color: 'var(--ink)', marginBottom: 28, fontFamily: 'var(--display)', fontWeight: 400, lineHeight: 1.4, letterSpacing: '-0.01em' }}>
-                Grow it, streamline it, or finally step back from it. Whatever the move is, I can help you get there.
-              </p>
-              <button onClick={onTalk} className="btn btn--primary" style={{ fontSize: 16, padding: '16px 26px' }}>
-                Book a free intro call <span className="arr">→</span>
-              </button>
-            </div>
-          </div>
-          <div className="hero-split__image" style={{
-            backgroundImage: 'url(assets/michael.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: '60% 30%',
-            aspectRatio: '3 / 4',
-            minHeight: 560,
-            borderRadius: 10,
-          }}/>
-        </div>
-        <style>{`
-          @media (max-width: 720px) {
-            .hero-split { grid-template-columns: 1fr !important; gap: 32px !important; }
-            .hero-split__image { display: none !important; }
-          }
-        `}</style>
-      </section>
-    );
-  }
-
-  // portrait-dominant
   return (
-    <section id="top" style={{ paddingTop: 100, paddingBottom: 80, position: 'relative', ...heroFade }}>
-      <div className="wrap">
-        <div className="reveal in" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }}/>
-          <span className="eyebrow">Operator's growth partner — based in Montreal</span>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24 }}>
-          <h1 className="h-display reveal in" style={{ fontSize: 'clamp(56px, 11vw, 180px)' }}>
-            {h1Map[tweaks.h1Variant] || h1Map.D1}
+    <section id="top" style={{ paddingTop: 140, paddingBottom: 80, position: 'relative', ...heroFade }}>
+      <div className="wrap hero-split" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.9fr', gap: 64, alignItems: 'stretch' }} >
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="reveal in" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+            <span className="live-dot" aria-hidden/>
+            <span className="eyebrow">{availabilityLabel()}</span>
+          </div>
+          <h1 className="h-display reveal in" style={{ fontSize: 'clamp(44px, 6.8vw, 104px)' }}>
+            {h1}
           </h1>
-        </div>
-        <div style={{
-          marginTop: 56,
-          display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 56,
-          alignItems: 'start',
-        }} className="dom-grid">
-          <div style={{
-            backgroundImage: 'url(assets/michael.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: '60% 30%',
-            aspectRatio: '3/4',
-            borderRadius: 10,
-          }}/>
-          <div style={{ paddingTop: 24 }}>
-            <p style={{ fontSize: 'clamp(20px, 1.7vw, 26px)', color: 'var(--ink-2)', lineHeight: 1.45, marginBottom: 32, maxWidth: '38ch' }}>
+          <div style={{ marginTop: 48 }}>
+            <p style={{ fontSize: 'clamp(22px, 1.9vw, 28px)', maxWidth: '40ch', color: 'var(--ink)', marginBottom: 28, fontFamily: 'var(--display)', fontWeight: 400, lineHeight: 1.4, letterSpacing: '-0.01em' }}>
               Grow it, streamline it, or finally step back from it. Whatever the move is, I can help you get there.
             </p>
-            <button onClick={onTalk} className="btn btn--primary" style={{ fontSize: 16, padding: '18px 28px' }}>
+            <button onClick={onTalk} className="btn btn--primary" style={{ fontSize: 16, padding: '16px 26px' }}>
               Book a free intro call <span className="arr">→</span>
             </button>
           </div>
         </div>
-        <style>{`@media (max-width: 860px) { .dom-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }`}</style>
+        <div className="hero-split__image" style={{
+          backgroundImage: 'url(assets/michael.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: '60% 30%',
+          aspectRatio: '3 / 4',
+          minHeight: 560,
+          borderRadius: 10,
+        }}/>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .hero-split { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .hero-split__image { display: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -378,89 +239,6 @@ function WhatIDo() {
             .services-grid .service-card { border-right: none !important; padding: 32px 0 !important; }
           }
           .service-card:hover h3 { color: var(--accent); }
-        `}</style>
-      </div>
-    </section>
-  );
-}
-
-/* ============ CALCULATOR PLACEHOLDER ============ */
-function CalculatorPlaceholder({ onTalk }) {
-  return (
-    <section style={{ padding: '0', margin: '0 0 110px' }}>
-      <div className="wrap">
-        <div style={{
-          background: 'var(--bg-2)',
-          color: 'var(--ink)',
-          borderRadius: 12,
-          padding: 'clamp(48px, 6vw, 96px)',
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
-          gap: 64,
-          alignItems: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          border: '1px solid var(--line)',
-        }} className="calc-card reveal">
-          {/* decorative grid */}
-          <div aria-hidden style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(20,17,13,0.05) 1px, transparent 0)',
-            backgroundSize: '24px 24px',
-          }}/>
-          <div style={{ position: 'relative' }}>
-            <div className="eyebrow" style={{ marginBottom: 22 }}>See what's possible · Coming soon</div>
-            <h2 className="h-section" style={{ fontSize: 'clamp(36px, 5.4vw, 78px)', marginBottom: 28 }}>
-              How much are you<br/>leaving on the table?
-            </h2>
-            <p style={{ fontSize: 'clamp(16px, 1.2vw, 19px)', color: 'var(--ink-2)', lineHeight: 1.5, maxWidth: '46ch' }}>
-              Pick your vertical, your biggest challenge, and see what fixing it is typically worth. Launching with V1 in the coming weeks.
-            </p>
-          </div>
-
-          {/* mock interface — the only filled element */}
-          <div style={{ position: 'relative' }} className="calc-mock">
-            <div style={{
-              background: 'var(--accent)',
-              color: 'var(--accent-ink)',
-              border: '1px solid var(--accent)',
-              borderRadius: 12,
-              padding: 28,
-              fontFamily: 'var(--mono)',
-              fontSize: 13,
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 22, color: 'rgba(244,241,236,0.55)' }}>
-                <span>Step 03 of 04</span>
-                <span>RESTAURANTS</span>
-              </div>
-              <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(244,241,236,0.55)', marginBottom: 14 }}>Your annual revenue</div>
-              <div style={{ display: 'flex', gap: 0, marginBottom: 32 }}>
-                {['$500K','$1M','$2M','$5M+'].map((v, i) => (
-                  <div key={v} style={{
-                    flex: 1, padding: '14px 6px', textAlign: 'center',
-                    border: '1px solid rgba(244,241,236,0.22)',
-                    borderLeft: i ? 'none' : '1px solid rgba(244,241,236,0.22)',
-                    background: i === 1 ? 'rgba(244,241,236,0.94)' : 'transparent',
-                    color: i === 1 ? 'var(--accent)' : 'inherit',
-                    fontWeight: i === 1 ? 600 : 400,
-                    borderRadius: i === 0 ? '8px 0 0 8px' : i === 3 ? '0 8px 8px 0' : 0,
-                  }}>{v}</div>
-                ))}
-              </div>
-              <div style={{ paddingTop: 24, borderTop: '1px solid rgba(244,241,236,0.22)' }}>
-                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(244,241,236,0.55)', marginBottom: 14 }}>Typical annual lift</div>
-                <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(36px, 4.6vw, 64px)', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.03em' }}>
-                  $80K <span style={{ opacity: 0.4 }}>—</span> $180K
-                </div>
-                <div style={{ marginTop: 12, fontSize: 12, color: 'rgba(244,241,236,0.55)' }}>
-                  Customer retention · Online ordering ops
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <style>{`
-          @media (max-width: 860px) { .calc-card { grid-template-columns: 1fr !important; gap: 40px !important; } }
         `}</style>
       </div>
     </section>
@@ -662,4 +440,4 @@ function Footer({ onTalk, hideCta = false }) {
   );
 }
 
-Object.assign(window, { Hero, Marquee, WhatIDo, CalculatorPlaceholder, FeaturedCaseStudy, AboutStrip, Footer });
+Object.assign(window, { Hero, Marquee, WhatIDo, FeaturedCaseStudy, AboutStrip, Footer });

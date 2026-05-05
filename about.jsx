@@ -209,13 +209,6 @@ function AboutApp() {
   }, [lang]);
   useReveal();
 
-  // Accent + type from saved tweaks (fall back to defaults)
-  useEffectAbout(() => {
-    const t = window.__TWEAKS__ || {};
-    document.documentElement.dataset.accent = t.accent || 'forest';
-    document.documentElement.dataset.type = t.typePairing || 'editorial';
-  }, []);
-
   // Dynamic years-in-tech
   useEffectAbout(() => {
     const now = new Date();
@@ -228,7 +221,7 @@ function AboutApp() {
 
   return (
     <>
-      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} langStyle={(window.__TWEAKS__ || {}).langStyle || 'segmented'} current="about" />
+      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} current="about" />
       <main>
         <AboutHero />
         <AboutCareer />

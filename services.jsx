@@ -453,17 +453,11 @@ function ServicesAppRoot() {
   }, [lang]);
   useReveal();
 
-  useEffectSvc(() => {
-    const t = window.__TWEAKS__ || {};
-    document.documentElement.dataset.accent = t.accent || 'forest';
-    document.documentElement.dataset.type = t.typePairing || 'editorial';
-  }, []);
-
   const onTalk = () => { window.location.href = 'book.html'; };
 
   return (
     <>
-      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} langStyle={(window.__TWEAKS__ || {}).langStyle || 'segmented'} current="services" />
+      <NavBar onTalk={onTalk} lang={lang} setLang={setLang} current="services" />
       <main>
         <ServicesHero onTalk={onTalk} />
         <Philosophy />
