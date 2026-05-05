@@ -33,7 +33,7 @@ function Hero({ onTalk }) {
     const imgP = new Promise((resolve) => {
       const img = new Image();
       img.onload = img.onerror = () => resolve();
-      img.src = 'assets/michael.jpg';
+      img.src = 'assets/michael.webp';
     });
     const fontsP = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     Promise.all([imgP, fontsP]).then(() => {
@@ -68,7 +68,7 @@ function Hero({ onTalk }) {
           </div>
         </div>
         <div className="hero-split__image" style={{
-          backgroundImage: 'url(assets/michael.jpg)',
+          backgroundImage: 'image-set(url(assets/michael.webp) type("image/webp"), url(assets/michael.jpg) type("image/jpeg"))',
           backgroundSize: 'cover',
           backgroundPosition: '60% 30%',
           aspectRatio: '3 / 4',
