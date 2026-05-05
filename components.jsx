@@ -52,12 +52,14 @@ function useActiveSection(ids) {
 
 /* ============ LANG SWITCH ============ */
 function LangSwitch({ lang, setLang, large = false }) {
+  const t = useT();
   const other = lang === 'en' ? 'fr' : 'en';
+  const ariaLabel = t('lang.switch_to', { lang: other.toUpperCase() });
 
   // Mobile overlay version
   if (large) {
     return (
-      <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
+      <button type="button" onClick={() => setLang(other)} aria-label={ariaLabel} style={{
         display: 'inline-flex', alignItems: 'center',
         background: 'var(--bg-2)', borderRadius: 999,
         padding: 4, fontFamily: 'var(--mono)', fontSize: 13, letterSpacing: '0.08em',
@@ -77,7 +79,7 @@ function LangSwitch({ lang, setLang, large = false }) {
 
   // Default: segmented pill
   return (
-    <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
+    <button type="button" onClick={() => setLang(other)} aria-label={ariaLabel} style={{
       display: 'inline-flex', alignItems: 'center',
       background: 'rgba(125,125,125,0.14)', borderRadius: 999, padding: 3,
       fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -99,6 +101,7 @@ function LangSwitch({ lang, setLang, large = false }) {
 
 /* ============ NAV ============ */
 function NavBar({ onTalk, lang, setLang, current = 'home' }) {
+  const t = useT();
   const y = useScrollY();
   const [open, setOpen] = useState(false);
   const scrolled = y > 40;
@@ -106,8 +109,8 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   // Cross-page nav: Services + About are top-level pages.
   // On home, "Michael Rurka" wordmark scrolls to top; on other pages it links home.
   const links = [
-    { label: 'Services', href: 'services.html', key: 'services' },
-    { label: 'About',    href: 'about.html',    key: 'about' },
+    { label: t('nav.services'), href: 'services.html', key: 'services' },
+    { label: t('nav.about'),    href: 'about.html',    key: 'about' },
   ];
 
   const wordmarkProps = current === 'home'
@@ -142,11 +145,11 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
             ))}
             <LangSwitch lang={lang} setLang={setLang} />
             <button onClick={onTalk} className="btn btn--primary" style={{ padding: '11px 20px', fontSize: 14 }}>
-              Let's talk <span className="arr">→</span>
+              {t('nav.cta')} <span className="arr">→</span>
             </button>
           </nav>
 
-          <button className="hamburger" aria-label="Menu" onClick={() => setOpen(true)}
+          <button className="hamburger" aria-label={t('nav.menu')} onClick={() => setOpen(true)}
             style={{ display: 'none', width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
             <svg width="22" height="14" viewBox="0 0 22 14" fill="none">
               <path d="M0 1h22M0 13h22" stroke="currentColor" strokeWidth="1.5" />
@@ -167,7 +170,7 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
           <span style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18 }}>
             Michael&nbsp;Rurka<span style={{ color: 'var(--accent)' }}>.</span>
           </span>
-          <button onClick={() => setOpen(false)} aria-label="Close" style={{ width: 44, height: 44 }}>
+          <button onClick={() => setOpen(false)} aria-label={t('nav.close')} style={{ width: 44, height: 44 }}>
             <svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 2l16 16M18 2L2 18" stroke="currentColor" strokeWidth="1.5"/></svg>
           </button>
         </div>
@@ -179,7 +182,7 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
             </a>
           ))}
           <button onClick={() => { setOpen(false); onTalk(); }} className="btn btn--primary" style={{ marginTop: 28, alignSelf: 'flex-start', fontSize: 17, padding: '16px 24px' }}>
-            Let's talk <span className="arr">→</span>
+            {t('nav.cta')} <span className="arr">→</span>
           </button>
           <div style={{ marginTop: 32 }}>
             <LangSwitch lang={lang} setLang={setLang} large />
@@ -203,68 +206,4 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   );
 }
 
-/* ============ Calendly Modal ============ */
-function CalendlyModal({ open, onClose }) {
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
-
-  if (!open) return null;
-  return (
-    <div onClick={onClose} style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(20,17,13,0.55)',
-      backdropFilter: 'blur(6px)',
-      WebkitBackdropFilter: 'blur(6px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 24,
-      animation: 'fadein .25s ease',
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: 'var(--bg)',
-        maxWidth: 540, width: '100%',
-        borderRadius: 6,
-        padding: 'clamp(28px, 4vw, 48px)',
-        position: 'relative',
-        animation: 'rise .35s cubic-bezier(.2,.7,.2,1)',
-      }}>
-        <button onClick={onClose} aria-label="Close" style={{
-          position: 'absolute', top: 18, right: 18, width: 36, height: 36, borderRadius: '50%',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5"/></svg>
-        </button>
-        <div className="eyebrow" style={{ marginBottom: 14 }}>Free intro call</div>
-        <h3 className="h-display" style={{ fontSize: 'clamp(36px, 5vw, 52px)', marginBottom: 16 }}>30 minutes,<br/>no pitch.</h3>
-        <p style={{ fontSize: 17, color: 'var(--ink-2)', lineHeight: 1.5, marginBottom: 28 }}>
-          You tell me what's going on in the business, I tell you if I think I can help. If I can't, I'll say so.
-        </p>
-        <div style={{
-          background: 'var(--bg-2)',
-          border: '1px dashed var(--line)',
-          borderRadius: 4,
-          padding: '40px 24px',
-          textAlign: 'center',
-          marginBottom: 24,
-        }}>
-          <div className="eyebrow" style={{ marginBottom: 10 }}>[ Calendly embed ]</div>
-          <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>Inline calendar would render here</div>
-        </div>
-        <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>
-          Prefer email? <a href="mailto:michaelrurka91@gmail.com" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--ink-3)' }}>michaelrurka91@gmail.com</a>
-        </div>
-      </div>
-      <style>{`
-        @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-      `}</style>
-    </div>
-  );
-}
-
-Object.assign(window, { useReveal, useScrollY, useActiveSection, NavBar, CalendlyModal, LangSwitch });
+Object.assign(window, { useReveal, useScrollY, useActiveSection, NavBar, LangSwitch });
