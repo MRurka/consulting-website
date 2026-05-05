@@ -35,7 +35,9 @@ function App() {
 
   // Years-in-tech dynamic value
   useEffectA(() => {
-    const yrs = new Date().getFullYear() - 2013;
+    const now = new Date();
+    let yrs = now.getFullYear() - 2013;
+    if (now.getMonth() < 6) yrs -= 1;
     document.querySelectorAll('.years-in-tech').forEach(el => el.textContent = yrs);
   }, [tweaks.h1Variant, tweaks.heroLayout]);
 

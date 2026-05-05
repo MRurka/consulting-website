@@ -182,7 +182,7 @@ function AboutClose({ onTalk }) {
           textAlign: 'center',
           border: '1px solid var(--line)',
         }}>
-          <div className="eyebrow" style={{ marginBottom: 20 }}>(03) Let's talk</div>
+          <div className="eyebrow" style={{ marginBottom: 20 }}>Let's talk</div>
           <h2 className="h-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)', marginBottom: 28 }}>
             Real customers.<br/>Real cash flow.<br/><em style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Real upside.</em>
           </h2>
@@ -218,7 +218,9 @@ function AboutApp() {
 
   // Dynamic years-in-tech
   useEffectAbout(() => {
-    const yrs = new Date().getFullYear() - 2013;
+    const now = new Date();
+    let yrs = now.getFullYear() - 2013;
+    if (now.getMonth() < 6) yrs -= 1;
     document.querySelectorAll('.years-in-tech').forEach(el => el.textContent = yrs);
   });
 

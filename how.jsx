@@ -21,10 +21,10 @@ function HowSection() {
             fontSize: 'clamp(20px, 1.7vw, 26px)', lineHeight: 1.5,
             color: 'rgba(244,241,236,0.85)', maxWidth: '52ch', margin: '0 auto 56px', textWrap: 'pretty',
           }}>
-            <span className="years-in-tech" style={{ fontWeight: 600, color: '#f4f1ec' }}>13</span> years hands-on inside high-growth startups — designing customer experiences, shaping product strategy, and shipping software. I bring all of it to your business.
+            <span className="years-in-tech" style={{ color: '#f4f1ec' }}>13</span> years hands-on inside high-growth startups — designing customer experiences, shaping product strategy, and shipping software. I bring all of it to your business.
           </p>
         </div>
-        <div className="reveal" data-d="2" style={{ marginTop: 80, paddingTop: 32, borderTop: '1px solid rgba(244,241,236,0.18)' }}>
+        <div className="reveal" data-d="2" style={{ marginTop: 80 }}>
           <HomeLogos theme="dark" />
         </div>
       </div>

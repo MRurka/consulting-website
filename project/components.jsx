@@ -333,7 +333,7 @@ function CalendlyModal({ open, onClose }) {
           <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>Inline calendar would render here</div>
         </div>
         <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>
-          Prefer email? <a href="mailto:hello@michaelrurka.com" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--ink-3)' }}>hello@michaelrurka.com</a>
+          Prefer email? <a href="mailto:michaelrurka91@gmail.com" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--ink-3)' }}>michaelrurka91@gmail.com</a>
         </div>
       </div>
       <style>{`

@@ -588,7 +588,7 @@ function Footer({ onTalk, hideCta = false }) {
           <div>
             <div className="eyebrow" style={{ color: 'rgba(244,241,236,0.4)', marginBottom: 14 }}>Reach me</div>
             <ul style={{ listStyle: 'none', display: 'grid', gap: 8 }}>
-              <li><a href="mailto:hello@michaelrurka.com" style={{ color: 'rgba(244,241,236,0.85)' }}>hello@michaelrurka.com</a></li>
+              <li><a href="mailto:michaelrurka91@gmail.com" style={{ color: 'rgba(244,241,236,0.85)' }}>michaelrurka91@gmail.com</a></li>
               <li><a href="#" style={{ color: 'rgba(244,241,236,0.85)' }}>LinkedIn ↗</a></li>
             </ul>
           </div>

@@ -426,7 +426,7 @@ function ServicesClose({ onTalk }) {
           padding: 'clamp(48px, 6vw, 96px)',
           textAlign: 'center',
         }}>
-          <div className="eyebrow" style={{ marginBottom: 20, color: 'rgba(244,241,236,0.5)' }}>(05) Let's talk</div>
+          <div className="eyebrow" style={{ marginBottom: 20, color: 'rgba(244,241,236,0.5)' }}>Let's talk</div>
           <h2 className="h-display" style={{ fontSize: 'clamp(44px, 7vw, 96px)', marginBottom: 28, color: 'var(--bg)' }}>
             Sound like<br/>a fit?
           </h2>

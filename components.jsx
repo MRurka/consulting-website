@@ -58,20 +58,21 @@ function LangSwitch({ lang, setLang, variant = 'minimal', large = false }) {
   // Mobile overlay version is always large + segmented, regardless of variant
   if (large) {
     return (
-      <div style={{
+      <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
         display: 'inline-flex', alignItems: 'center',
         background: 'var(--bg-2)', borderRadius: 999,
         padding: 4, fontFamily: 'var(--mono)', fontSize: 13, letterSpacing: '0.08em',
+        color: 'inherit', cursor: 'pointer',
       }}>
         {['en', 'fr'].map(l => (
-          <button key={l} onClick={() => setLang(l)} style={{
+          <span key={l} style={{
             padding: '10px 20px', borderRadius: 999, textTransform: 'uppercase',
             background: lang === l ? 'var(--ink)' : 'transparent',
             color: lang === l ? 'var(--bg)' : 'var(--ink-2)',
             transition: 'background .25s, color .25s', fontWeight: 500,
-          }}>{l}</button>
+          }}>{l}</span>
         ))}
-      </div>
+      </button>
     );
   }
 
@@ -99,22 +100,22 @@ function LangSwitch({ lang, setLang, variant = 'minimal', large = false }) {
   // 2. Toggle pill — segmented, soft fill on active
   if (variant === 'segmented') {
     return (
-      <div role="group" aria-label="Language" style={{
+      <button type="button" onClick={() => setLang(other)} aria-label={`Switch to ${other.toUpperCase()}`} style={{
         display: 'inline-flex', alignItems: 'center',
         background: 'rgba(125,125,125,0.14)', borderRadius: 999, padding: 3,
-        ...baseMono,
+        ...baseMono, color: 'inherit', cursor: 'pointer',
       }}>
         {['en','fr'].map(l => (
-          <button key={l} onClick={() => setLang(l)} style={{
+          <span key={l} style={{
             padding: '6px 12px', borderRadius: 999, fontWeight: 600,
             background: lang === l ? 'var(--bg)' : 'transparent',
             color: 'inherit',
             opacity: lang === l ? 1 : 0.6,
             transition: 'background .25s, opacity .25s',
-            minWidth: 32,
-          }}>{l.toUpperCase()}</button>
+            minWidth: 32, textAlign: 'center',
+          }}>{l.toUpperCase()}</span>
         ))}
-      </div>
+      </button>
     );
   }
 
@@ -333,7 +334,7 @@ function CalendlyModal({ open, onClose }) {
           <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>Inline calendar would render here</div>
         </div>
         <div style={{ fontSize: 14, color: 'var(--ink-3)' }}>
-          Prefer email? <a href="mailto:hello@michaelrurka.com" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--ink-3)' }}>hello@michaelrurka.com</a>
+          Prefer email? <a href="mailto:michaelrurka91@gmail.com" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--ink-3)' }}>michaelrurka91@gmail.com</a>
         </div>
       </div>
       <style>{`
