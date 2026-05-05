@@ -200,13 +200,7 @@ function AboutClose({ onTalk }) {
 
 /* ---------- Page App ---------- */
 function AboutApp() {
-  const [lang, setLang] = useStateAbout(() => {
-    try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
-  });
-  useEffectAbout(() => {
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('mr_lang', lang); } catch {}
-  }, [lang]);
+  const { lang, setLang } = useLang();
   useReveal();
 
   // Dynamic years-in-tech
@@ -232,4 +226,4 @@ function AboutApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<AboutApp />);
+ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><AboutApp /></I18nProvider>);

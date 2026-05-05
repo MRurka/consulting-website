@@ -82,13 +82,7 @@ function BookCalendar() {
 /* ---------- Page App ---------- */
 function BookApp() {
   useReveal();
-  const [lang, setLang] = useStateBook(() => {
-    try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
-  });
-
-  useEffectBook(() => {
-    try { localStorage.setItem('mr_lang', lang); } catch {}
-  }, [lang]);
+  const { lang, setLang } = useLang();
 
   // CTAs everywhere lead here. On this page, "Let's talk" buttons just scroll to the calendar.
   const onTalk = () => {
@@ -111,4 +105,4 @@ function BookApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<BookApp />);
+ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><BookApp /></I18nProvider>);

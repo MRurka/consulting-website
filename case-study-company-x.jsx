@@ -480,13 +480,7 @@ function CSClose({ onTalk }) {
 
 /* ---------- Page App ---------- */
 function CaseStudyApp() {
-  const [lang, setLang] = useStateCS(() => {
-    try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
-  });
-  useEffectCS(() => {
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('mr_lang', lang); } catch {}
-  }, [lang]);
+  const { lang, setLang } = useLang();
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };
@@ -509,4 +503,4 @@ function CaseStudyApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<CaseStudyApp />);
+ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><CaseStudyApp /></I18nProvider>);

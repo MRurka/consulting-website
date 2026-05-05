@@ -444,13 +444,7 @@ function ServicesClose({ onTalk }) {
 
 /* ---------- Page App ---------- */
 function ServicesAppRoot() {
-  const [lang, setLang] = useStateSvc(() => {
-    try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
-  });
-  useEffectSvc(() => {
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('mr_lang', lang); } catch {}
-  }, [lang]);
+  const { lang, setLang } = useLang();
   useReveal();
 
   const onTalk = () => { window.location.href = 'book.html'; };
@@ -471,4 +465,4 @@ function ServicesAppRoot() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<ServicesAppRoot />);
+ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><ServicesAppRoot /></I18nProvider>);

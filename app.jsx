@@ -1,14 +1,8 @@
 /* App entry — composes everything */
-const { useState: useStateA, useEffect: useEffectA } = React;
+const { useEffect: useEffectA } = React;
 
 function App() {
-  const [lang, setLang] = useStateA(() => {
-    try { return localStorage.getItem('mr_lang') || 'en'; } catch { return 'en'; }
-  });
-  useEffectA(() => {
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('mr_lang', lang); } catch {}
-  }, [lang]);
+  const { lang, setLang } = useLang();
   useReveal();
 
   // Years-in-tech dynamic value
@@ -35,4 +29,4 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><App /></I18nProvider>);
