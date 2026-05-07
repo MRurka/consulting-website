@@ -2,6 +2,10 @@
    BOOK PAGE — michaelrurka.com/book
    Free intro call: Google Calendar embed + Montreal/Laurentides note
    ================================================================= */
+import React from 'react';
+import { useT, useLang, usePageTitle, T } from './i18n.jsx';
+import { useReveal, NavBar } from './components.jsx';
+import { Footer } from './sections.jsx';
 
 /* ---------- Hero ---------- */
 function BookHero() {
@@ -81,7 +85,7 @@ function BookCalendar() {
 }
 
 /* ---------- Page App ---------- */
-function BookApp() {
+export default function BookApp() {
   useReveal();
   const { lang, setLang } = useLang();
   usePageTitle('meta.book.title');
@@ -107,4 +111,3 @@ function BookApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><BookApp /></I18nProvider>);

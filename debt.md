@@ -3,26 +3,16 @@
 Tracked deferrals. Append on defer, delete on resolve. See CLAUDE.md
 for the protocol.
 
-## i18n: French SEO + meta description
+## i18n: French meta descriptions
 
-**Deferred:** 2026-05-05.
+**Deferred:** 2026-05-07.
 
-**What:** French copy is rendered client-side via fetched JSON. Search
-engine crawlers that don't execute JS will only see the English default
-in static HTML, so `/index.html`, `/about.html`, etc. are not indexable
-in French. Additionally, only `<title>` is currently localized — full
-`<meta name="description">` localization is also deferred.
+**What:** Five `meta.<page>.description` keys in `i18n/fr.json` are
+still `[FR] <english>` placeholders. They are now correctly emitted
+into FR HTML `<head>` (description, og:description, twitter:description,
+JSON-LD description), so the SEO plumbing exists — only the copy is
+missing.
 
-**Fix options when revisited:**
-
-1. Generate `/fr/*.html` static mirrors at deploy time (build step
-   required — currently no build).
-2. Pre-render with a small Node script that walks the dict and emits
-   `fr-<page>.html` with strings substituted in.
-3. Server-side rendering (heaviest — would change hosting model).
-
-Whichever path is chosen, also generate localized `<meta name=description>`
-and OpenGraph tags as part of the same pass.
-
-**Trigger to revisit:** if FR organic search traffic becomes a goal, or
-if analytics show FR users landing on EN content.
+**Trigger to revisit:** before sharing FR pages externally for organic
+search or social previews. Replace placeholders, then run
+`node scripts/check-i18n.js --update-hashes` to re-baseline.

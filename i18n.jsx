@@ -1,37 +1,18 @@
 /* i18n runtime — provider, hooks, <T> tokenizer.
  *
- * Boot flow:
- *   1. Inline pre-Babel <script> in each HTML reads ?lang= / localStorage / navigator.language,
- *      sets <html lang>, kicks off `fetch('i18n/<lang>.json')`, and parks the promise on
- *      window.__I18N_BOOT__ = { lang, dictPromise }.
- *   2. <I18nProvider> awaits that promise. Renders null until resolved (block first paint).
- *      On fetch failure, falls back to en.json. If both fail, renders with raw keys
- *      and console.error — never hangs.
- *   3. setLang() reloads the dict for the new locale and updates ?lang= via replaceState.
+ * Post-prerender model: each HTML page is monolingual. The build script
+ * inlines window.__I18N__ = { lang, dict } so hydration uses the exact
+ * same strings the server rendered. setLang() navigates to the other
+ * locale's URL — no client-side dict swap, no first-paint blocking.
  *
- * Public API on window: I18nProvider, useT, useLang, T.
+ * URL convention:
+ *   EN: /index.html, /about.html, /services.html, /book.html, /case-study-company-x.html
+ *   FR: same paths under /fr/
  */
 
-const { createContext: i18nCreateContext, useContext: i18nUseContext,
-        useState: i18nUseState, useEffect: i18nUseEffect } = React;
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const I18nContext = i18nCreateContext({ lang: 'en', dict: {}, setLang: () => {} });
-
-/* ============ dict loader ============ */
-const __dictCache = {};
-async function loadDict(lang) {
-  if (__dictCache[lang]) return __dictCache[lang];
-  try {
-    const res = await fetch('i18n/' + lang + '.json', { cache: 'no-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    __dictCache[lang] = data;
-    return data;
-  } catch (err) {
-    console.error('[i18n] failed to load', lang, err);
-    return null;
-  }
-}
+const I18nContext = createContext({ lang: 'en', dict: {}, setLang: () => {} });
 
 /* ============ string interpolation ============ */
 // Replaces {var} placeholders with vars[var]; substitutes {nbsp} -> U+00A0.
@@ -47,12 +28,10 @@ function interpolate(str, vars) {
 /* ============ <T> tokenizer ============ */
 // Parses a small whitelist of inline tags into React elements:
 //   <br/> <em>...</em> <strong>...</strong> <a href="...">...</a>
-// No innerHTML — pure tokenizer.
 const T_TAG_RE = /<(br\s*\/?|\/?(?:em|strong|a)(?:\s+href="[^"]*")?)\s*>/g;
 
 function parseInline(str) {
   if (typeof str !== 'string') return [str];
-  const out = [];
   const stack = [{ tag: 'root', children: [] }];
   let cursor = 0;
   let m;
@@ -78,7 +57,6 @@ function parseInline(str) {
       if (stack[stack.length - 1].tag === expected) stack.pop();
       else console.warn('[i18n] unbalanced </' + expected + '> in', JSON.stringify(str));
     } else {
-      // unknown tag — emit as literal text
       stack[stack.length - 1].children.push(m[0]);
     }
   }
@@ -101,14 +79,16 @@ function renderNodes(nodes, keyPrefix) {
   });
 }
 
-function T({ id, vars }) {
-  const { dict } = i18nUseContext(I18nContext);
+export function T({ id, vars }) {
+  const { dict } = useContext(I18nContext);
   const raw = dict && dict[id];
   if (raw == null) {
-    if (typeof window !== 'undefined' && !window.__T_WARNED__) window.__T_WARNED__ = {};
-    if (typeof window !== 'undefined' && !window.__T_WARNED__[id]) {
-      console.warn('[i18n] missing key:', id);
-      window.__T_WARNED__[id] = true;
+    if (typeof window !== 'undefined') {
+      if (!window.__T_WARNED__) window.__T_WARNED__ = {};
+      if (!window.__T_WARNED__[id]) {
+        console.warn('[i18n] missing key:', id);
+        window.__T_WARNED__[id] = true;
+      }
     }
     return id;
   }
@@ -118,15 +98,17 @@ function T({ id, vars }) {
 }
 
 /* ============ hooks ============ */
-function useT() {
-  const { dict } = i18nUseContext(I18nContext);
+export function useT() {
+  const { dict } = useContext(I18nContext);
   return function t(key, vars) {
     const raw = dict && dict[key];
     if (raw == null) {
-      if (typeof window !== 'undefined' && !window.__T_WARNED__) window.__T_WARNED__ = {};
-      if (typeof window !== 'undefined' && !window.__T_WARNED__[key]) {
-        console.warn('[i18n] missing key:', key);
-        window.__T_WARNED__[key] = true;
+      if (typeof window !== 'undefined') {
+        if (!window.__T_WARNED__) window.__T_WARNED__ = {};
+        if (!window.__T_WARNED__[key]) {
+          console.warn('[i18n] missing key:', key);
+          window.__T_WARNED__[key] = true;
+        }
       }
       return key;
     }
@@ -134,69 +116,48 @@ function useT() {
   };
 }
 
-function useLang() {
-  const { lang, setLang } = i18nUseContext(I18nContext);
+export function useLang() {
+  const { lang, setLang } = useContext(I18nContext);
   return { lang, setLang };
 }
 
-// Reactively set document.title from a dict key. Pass null to disable.
-function usePageTitle(key) {
-  const { dict } = i18nUseContext(I18nContext);
-  i18nUseEffect(() => {
-    if (!key || !dict) return;
-    const v = dict[key];
-    if (v) document.title = v;
-  }, [key, dict]);
+// usePageTitle: kept for API compatibility, but in the prerendered model
+// the <title> is already correct from SSR. This becomes a no-op except
+// for confirming it on hydration in case anyone deep-linked weirdly.
+export function usePageTitle(/* key */) {
+  // intentionally empty — SSR sets the title.
+}
+
+/* ============ URL helpers ============ */
+// Map current path to the equivalent path in `nextLang`.
+// EN: /about.html  ↔  FR: /fr/about.html
+// EN: /            ↔  FR: /fr/
+function pathForLang(currentPath, nextLang) {
+  if (nextLang === 'fr') {
+    return currentPath.startsWith('/fr/') ? currentPath : ('/fr' + currentPath);
+  }
+  if (currentPath.startsWith('/fr/')) return currentPath.replace(/^\/fr\//, '/');
+  return currentPath;
 }
 
 /* ============ provider ============ */
-function I18nProvider({ children }) {
-  const boot = (typeof window !== 'undefined' && window.__I18N_BOOT__) || { lang: 'en', dictPromise: loadDict('en') };
-  const [lang, setLangState] = i18nUseState(boot.lang);
-  const [dict, setDict] = i18nUseState(null);
+export function I18nProvider({ initialDict, initialLang, children }) {
+  // Both server and client read from the same source. On the client we
+  // also try window.__I18N__ as a fallback (e.g. when this provider is
+  // mounted without explicit props by ad-hoc tooling).
+  const lang = initialLang
+    || (typeof window !== 'undefined' && window.__I18N__ && window.__I18N__.lang)
+    || 'en';
+  const dict = initialDict
+    || (typeof window !== 'undefined' && window.__I18N__ && window.__I18N__.dict)
+    || {};
 
-  // Resolve the boot promise on mount.
-  i18nUseEffect(() => {
-    let cancelled = false;
-    Promise.resolve(boot.dictPromise).then((d) => {
-      if (cancelled) return;
-      if (d) {
-        __dictCache[boot.lang] = d;
-        setDict(d);
-      } else if (boot.lang !== 'en') {
-        // Fallback to English on failure.
-        loadDict('en').then((en) => {
-          if (cancelled) return;
-          if (en) { setLangState('en'); setDict(en); }
-          else setDict({}); // both failed — render with raw keys
-        });
-      } else {
-        setDict({});
-      }
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Switch locale: load dict, persist, update URL + <html lang>.
-  const setLang = React.useCallback(async (next) => {
-    if (next === lang) return;
-    const d = await loadDict(next);
-    if (!d) {
-      console.error('[i18n] cannot switch to', next, '(load failed)');
-      return;
-    }
-    setDict(d);
-    setLangState(next);
-    try { localStorage.setItem('mr_lang', next); } catch {}
-    document.documentElement.lang = next;
-    try {
-      const url = new URL(window.location.href);
-      url.searchParams.set('lang', next);
-      window.history.replaceState({}, '', url);
-    } catch {}
+  const setLang = useCallback((next) => {
+    if (next === lang || typeof window === 'undefined') return;
+    try { localStorage.setItem('mr_lang', next); } catch (e) { /* private mode, ignore */ }
+    const newPath = pathForLang(window.location.pathname, next);
+    window.location.assign(newPath + window.location.search + window.location.hash);
   }, [lang]);
-
-  if (dict === null) return null; // block first paint
 
   return React.createElement(
     I18nContext.Provider,
@@ -204,5 +165,3 @@ function I18nProvider({ children }) {
     children
   );
 }
-
-Object.assign(window, { I18nProvider, useT, useLang, usePageTitle, T });

@@ -2,6 +2,10 @@
    CASE STUDY — Company X (anonymous, cash-services business)
    Page-only sections; mounts a CaseStudyApp using shared NavBar/Footer.
    ================================================================= */
+import React from 'react';
+import { useT, useLang, usePageTitle, T } from './i18n.jsx';
+import { useReveal, NavBar } from './components.jsx';
+import { Footer } from './sections.jsx';
 
 /* ---------- Hero ---------- */
 function CSHero() {
@@ -448,7 +452,7 @@ function CSClose({ onTalk }) {
 }
 
 /* ---------- Page App ---------- */
-function CaseStudyApp() {
+export default function CaseStudyApp() {
   const { lang, setLang } = useLang();
   usePageTitle('meta.cs.title');
   useReveal();
@@ -473,4 +477,3 @@ function CaseStudyApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><CaseStudyApp /></I18nProvider>);

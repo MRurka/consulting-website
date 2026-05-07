@@ -1,6 +1,9 @@
 /* Big sections — hero, marquee, services, case study, work grid, footer */
+import React, { useState, useEffect } from 'react';
+import { useT, useLang, T } from './i18n.jsx';
+import { MobileCarousel } from './carousel.jsx';
 
-function availabilityLabel(now = new Date(), lang = 'en', t = null) {
+export function availabilityLabel(now = new Date(), lang = 'en', t = null) {
   const year = now.getFullYear();
   const month = now.getMonth();
   const day = now.getDate();
@@ -22,18 +25,18 @@ function availabilityLabel(now = new Date(), lang = 'en', t = null) {
 }
 
 /* ============ HERO ============ */
-function Hero({ onTalk }) {
+export function Hero({ onTalk }) {
   const t = useT();
   const { lang } = useLang();
 
   // Hold the hero invisible until the portrait + fonts are decoded, then fade the whole section in.
-  const [heroReady, setHeroReady] = React.useState(false);
-  React.useEffect(() => {
+  const [heroReady, setHeroReady] = useState(false);
+  useEffect(() => {
     let cancelled = false;
     const imgP = new Promise((resolve) => {
       const img = new Image();
       img.onload = img.onerror = () => resolve();
-      img.src = 'assets/michael.webp';
+      img.src = '/assets/michael.webp';
     });
     const fontsP = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     Promise.all([imgP, fontsP]).then(() => {
@@ -53,7 +56,7 @@ function Hero({ onTalk }) {
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div className="reveal in" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
             <span className="live-dot" aria-hidden/>
-            <span className="eyebrow">{availabilityLabel(new Date(), lang, t)}</span>
+            <span className="eyebrow" suppressHydrationWarning>{availabilityLabel(new Date(), lang, t)}</span>
           </div>
           <h1 className="h-display reveal in" style={{ fontSize: 'clamp(44px, 6.8vw, 104px)', fontFamily: undefined }}>
             <T id="home.hero.h1" />
@@ -68,7 +71,7 @@ function Hero({ onTalk }) {
           </div>
         </div>
         <div className="hero-split__image" style={{
-          backgroundImage: 'image-set(url(assets/michael.webp) type("image/webp"), url(assets/michael.jpg) type("image/jpeg"))',
+          backgroundImage: 'image-set(url(/assets/michael.webp) type("image/webp"), url(/assets/michael.jpg) type("image/jpeg"))',
           backgroundSize: 'cover',
           backgroundPosition: '60% 30%',
           aspectRatio: '3 / 4',
@@ -88,7 +91,7 @@ function Hero({ onTalk }) {
 }
 
 /* ============ WHAT I DO ============ */
-function WhatIDo() {
+export function WhatIDo() {
   const t = useT();
   const keys = ['cx', 'ops', 'tech', 'growth'];
   const carouselItems = keys.map((k, i) => ({
@@ -148,7 +151,7 @@ function WhatIDo() {
 }
 
 /* ============ FEATURED CASE STUDY ============ */
-function FeaturedCaseStudy() {
+export function FeaturedCaseStudy() {
   const t = useT();
   return (
     <section id="work">
@@ -232,7 +235,7 @@ function Stat({ big, small }) {
 }
 
 /* ============ FOOTER ============ */
-function Footer({ onTalk, hideCta = false }) {
+export function Footer({ onTalk, hideCta = false }) {
   const t = useT();
   return (
     <footer style={{ background: 'var(--ink)', color: 'var(--bg)', padding: hideCta ? '40px 0' : '120px 0 40px', position: 'relative' }}>
@@ -289,4 +292,3 @@ function Footer({ onTalk, hideCta = false }) {
   );
 }
 
-Object.assign(window, { Hero, WhatIDo, FeaturedCaseStudy, Footer });

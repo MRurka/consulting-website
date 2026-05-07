@@ -2,6 +2,10 @@
    SERVICES PAGE — michaelrurka.com/services
    Lead with the differentiator: outcome-first, not delivery-first.
    ================================================================= */
+import React from 'react';
+import { useT, useLang, usePageTitle, T } from './i18n.jsx';
+import { useReveal, NavBar } from './components.jsx';
+import { Footer } from './sections.jsx';
 
 /* ---------- Hero ---------- */
 function ServicesHero() {
@@ -317,7 +321,7 @@ function ServicesClose({ onTalk }) {
 }
 
 /* ---------- Page App ---------- */
-function ServicesAppRoot() {
+export default function ServicesAppRoot() {
   const { lang, setLang } = useLang();
   usePageTitle('meta.services.title');
   useReveal();
@@ -340,4 +344,3 @@ function ServicesAppRoot() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><ServicesAppRoot /></I18nProvider>);

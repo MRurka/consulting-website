@@ -11,10 +11,15 @@
   "lang.switch_to": "Switch to {lang}",
 
   "meta.home.title": "Michael Rurka — Operator's growth partner.",
+  "meta.home.description": "Michael Rurka — Operator's growth partner. Scalable operations and growth strategy for owner-led businesses. Based in Montreal, working across Canada and Latin America.",
   "meta.about.title": "About — Michael Rurka",
+  "meta.about.description": "I help operators get the growth layer their business deserves. 13 years hands-on in tech across high-growth startups in North America.",
   "meta.services.title": "Services — Michael Rurka",
+  "meta.services.description": "Outcome-first consulting. Three ways to work together: scoped consulting, retainer with skin in the game, or full equity partnership.",
   "meta.book.title": "Book a free intro call — Michael Rurka",
+  "meta.book.description": "30 minutes, no pitch. You tell me what's going on in the business. I tell you if I think I can help.",
   "meta.cs.title": "Case study — A cash business that runs without its owner · Michael Rurka",
+  "meta.cs.description": "A cash-based services business: 266% YoY gross profit growth, ~99% theft reduction, 1 month to first MVP. How a custom-built operating system changed everything.",
 
   "availability.same_year": "Available — {m1} & {m2} {year}",
   "availability.cross_year": "Available — {m1} {y1} & {m2} {y2}",

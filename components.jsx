@@ -1,8 +1,9 @@
 /* Shared small components */
-const { useState, useEffect, useRef, useMemo } = React;
+import React, { useState, useEffect } from 'react';
+import { useT } from './i18n.jsx';
 
 /* ============ HOOKS ============ */
-function useReveal() {
+export function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
@@ -18,7 +19,7 @@ function useReveal() {
   }, []);
 }
 
-function useScrolledPast(threshold = 40) {
+export function useScrolledPast(threshold = 40) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > threshold);
@@ -31,7 +32,7 @@ function useScrolledPast(threshold = 40) {
 
 // Years from a start year to now, rounded down to the nearest mid-year.
 // Used in bio/lede copy ("12 years hands-on…"). Started June 2013.
-function yearsSince(startYear, startMonth = 6) {
+export function yearsSince(startYear, startMonth = 6) {
   const now = new Date();
   let yrs = now.getFullYear() - startYear;
   if (now.getMonth() < startMonth) yrs -= 1;
@@ -39,7 +40,7 @@ function yearsSince(startYear, startMonth = 6) {
 }
 
 /* ============ LANG SWITCH ============ */
-function LangSwitch({ lang, setLang, large = false }) {
+export function LangSwitch({ lang, setLang, large = false }) {
   const t = useT();
   const other = lang === 'en' ? 'fr' : 'en';
   const ariaLabel = t('lang.switch_to', { lang: other.toUpperCase() });
@@ -88,21 +89,25 @@ function LangSwitch({ lang, setLang, large = false }) {
 }
 
 /* ============ NAV ============ */
-function NavBar({ onTalk, lang, setLang, current = 'home' }) {
+// `lang` here is needed so links can be lang-aware: on FR pages the
+// hrefs need the /fr/ prefix. We rely on relative URLs working — every
+// page lives in either / or /fr/, so `services.html` resolves correctly
+// in both. Wordmark on non-home pages goes to the lang-correct index.
+export function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   const t = useT();
   const scrolled = useScrolledPast(40);
   const [open, setOpen] = useState(false);
 
-  // Cross-page nav: Services + About are top-level pages.
-  // On home, "Michael Rurka" wordmark scrolls to top; on other pages it links home.
   const links = [
     { label: t('nav.services'), href: 'services.html', key: 'services' },
     { label: t('nav.about'),    href: 'about.html',    key: 'about' },
   ];
 
+  // Home wordmark scrolls to top; other pages link to lang-correct home.
+  const homeHref = lang === 'fr' ? '/fr/' : '/';
   const wordmarkProps = current === 'home'
     ? { href: '#top', onClick: (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setOpen(false); } }
-    : { href: 'index.html' };
+    : { href: homeHref };
 
   return (
     <>
@@ -193,5 +198,3 @@ function NavBar({ onTalk, lang, setLang, current = 'home' }) {
     </>
   );
 }
-
-Object.assign(window, { useReveal, useScrolledPast, yearsSince, NavBar, LangSwitch });

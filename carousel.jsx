@@ -10,7 +10,8 @@
      ariaLabel    — region label for a11y.
 */
 
-const { useState: useStateMC, useEffect: useEffectMC, useRef: useRefMC, useId: useIdMC } = React;
+import React, { useState, useEffect, useRef, useId } from 'react';
+import { useT } from './i18n.jsx';
 
 const MC_AUTO_MS = 10000;
 
@@ -42,32 +43,32 @@ function defaultMCRenderItem(item) {
   );
 }
 
-function MobileCarousel({
+export function MobileCarousel({
   items,
   renderItem = defaultMCRenderItem,
   autoMs = MC_AUTO_MS,
   breakpoint = 720,
   ariaLabel,
 }) {
-  const [index, setIndex] = useStateMC(0);
+  const [index, setIndex] = useState(0);
   const next = () => setIndex((index + 1) % items.length);
   const prev = () => setIndex((index - 1 + items.length) % items.length);
 
   const t = useT();
-  const scrollerRef = useRefMC(null);
-  const programmaticRef = useRefMC(false);
-  const debounceRef = useRefMC(0);
-  const uid = useIdMC().replace(/:/g, '');
+  const scrollerRef = useRef(null);
+  const programmaticRef = useRef(false);
+  const debounceRef = useRef(0);
+  const uid = useId().replace(/:/g, '');
 
   // Auto-advance via setTimeout (no per-frame state); CSS animation drives the
   // active dot's fill. Skip when prefers-reduced-motion.
-  useEffectMC(() => {
+  useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const tid = setTimeout(() => setIndex(i => (i + 1) % items.length), autoMs);
     return () => clearTimeout(tid);
   }, [index, autoMs, items.length]);
 
-  useEffectMC(() => {
+  useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
     const slide = el.children[index];
@@ -187,4 +188,3 @@ function MobileCarousel({
   );
 }
 
-window.MobileCarousel = MobileCarousel;

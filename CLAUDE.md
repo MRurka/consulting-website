@@ -29,7 +29,7 @@ second arg to `t()` or via `vars={{ name }}` on `<T>`.
 **Before reporting any UI task complete, run:**
 
 ```sh
-node scripts/check-i18n.js
+npm run check-i18n
 ```
 
 Fix any failures. The same script runs as a `git commit`/`git push` hook
@@ -38,6 +38,27 @@ fires and the script fails, do not bypass it; fix the underlying issue.
 
 If the i18n schema changes or you need to add genuinely new keys, do so
 in the same change that introduces the strings — never as a follow-up.
+
+## Build model
+
+Site is statically prerendered. `scripts/build.js` runs esbuild for SSR
+and client bundles per page, then writes ten HTML files to `dist/` (five
+pages × EN/FR). EN serves at `/<page>.html`, FR at `/fr/<page>.html`.
+Run `npm run build` after any source edit; `npm run dev` builds and
+serves on `:8765`. There is no watch mode.
+
+When adding/removing pages: update the `PAGES` array in
+`scripts/build.js`, add a per-page entry under `entries/`, and add the
+matching `meta.<slug>.title` + `meta.<slug>.description` keys to both
+i18n JSONs. Asset paths inside JSX must be **root-relative**
+(`/assets/foo.png`) so they resolve correctly under `/fr/`. Internal
+nav links can stay relative (`services.html` resolves correctly under
+both `/` and `/fr/`).
+
+Anything rendered with `new Date()` or other moving inputs needs
+`suppressHydrationWarning` on the wrapping element — SSR runs at build
+time, hydration runs in the browser, and the values may differ across
+month/year boundaries.
 
 ## debt.md protocol
 

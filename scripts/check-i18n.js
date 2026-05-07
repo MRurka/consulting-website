@@ -15,20 +15,22 @@
  *      value has changed since the hash was recorded, fail — Michael
  *      needs to re-translate. Run with --update-hashes after FR re-sync
  *      to re-baseline.
- *   F. HTML inline `var titles = { en, fr }` maps must match the
- *      meta.<page>.title key in each JSON. The boot inlines the title
- *      synchronously to avoid a tab-title flash on FR deep-links;
- *      this check stops it drifting from the JSON source of truth.
+ *
+ * Note: page <title>s are now emitted by the build script (scripts/build.js)
+ * directly from i18n/<lang>.json — no more inline `var titles = {...}` map
+ * to drift, so the old Check F is gone.
  *
  * Exit code 1 on any failure. Prints offending file:line.
  *
  * No deps — plain Node.
  */
 
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const EN_PATH = path.join(ROOT, 'i18n', 'en.json');
 const FR_PATH = path.join(ROOT, 'i18n', 'fr.json');
@@ -175,30 +177,6 @@ if (UPDATE_HASHES) {
     if (typeof frVal === 'string' && frVal.startsWith('[FR] ')) continue; // still a placeholder, not a real translation
     fail('[E] ' + k + ': EN value changed since last FR sync — re-translate or run check-i18n.js --update-hashes');
   }
-}
-
-/* ---------- Check F: inline HTML title maps match JSON meta.*.title ---------- */
-const PAGE_META_MAP = {
-  'index.html': 'meta.home.title',
-  'about.html': 'meta.about.title',
-  'services.html': 'meta.services.title',
-  'book.html': 'meta.book.title',
-  'case-study-company-x.html': 'meta.cs.title',
-};
-const TITLES_RE = /var\s+titles\s*=\s*\{\s*en:\s*"((?:[^"\\]|\\.)*)"\s*,\s*fr:\s*"((?:[^"\\]|\\.)*)"\s*\}/;
-function unescapeJSString(s) {
-  return s.replace(/\\(.)/g, (_, c) => c === 'n' ? '\n' : c === 't' ? '\t' : c);
-}
-for (const [file, key] of Object.entries(PAGE_META_MAP)) {
-  const p = path.join(ROOT, file);
-  if (!fs.existsSync(p)) { fail('[F] ' + file + ': missing'); continue; }
-  const src = fs.readFileSync(p, 'utf8');
-  const m = TITLES_RE.exec(src);
-  if (!m) { fail('[F] ' + file + ': no inline `var titles = { en, fr }` found'); continue; }
-  const inlineEn = unescapeJSString(m[1]);
-  const inlineFr = unescapeJSString(m[2]);
-  if (inlineEn !== en[key]) fail('[F] ' + file + ': inline EN title does not match en.json[' + key + ']');
-  if (inlineFr !== fr[key]) fail('[F] ' + file + ': inline FR title does not match fr.json[' + key + ']');
 }
 
 /* ---------- report ---------- */

@@ -1,5 +1,12 @@
-/* App entry — composes everything */
-function App() {
+/* App entry — composes everything for the home page */
+import React from 'react';
+import { useLang } from './i18n.jsx';
+import { useReveal, NavBar } from './components.jsx';
+import { Hero, WhatIDo, FeaturedCaseStudy, Footer } from './sections.jsx';
+import { HowSection } from './how.jsx';
+import { usePageTitle } from './i18n.jsx';
+
+export default function App() {
   const { lang, setLang } = useLang();
   usePageTitle('meta.home.title');
   useReveal();
@@ -19,5 +26,3 @@ function App() {
     </>
   );
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><App /></I18nProvider>);

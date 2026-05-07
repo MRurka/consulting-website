@@ -1,6 +1,10 @@
 /* =================================================================
    ABOUT PAGE — michaelrurka.com/about
    ================================================================= */
+import React from 'react';
+import { useT, useLang, usePageTitle, T } from './i18n.jsx';
+import { useReveal, yearsSince, NavBar } from './components.jsx';
+import { Footer } from './sections.jsx';
 
 /* ---------- Hero / consolidated bio ---------- */
 function AboutHero() {
@@ -22,7 +26,7 @@ function AboutHero() {
             <div className="eyebrow" style={{ marginBottom: 14 }}>{t('about.hero.aside')}</div>
           </div>
           <div>
-            <p className="reveal" data-d="2" style={{ fontSize: 'clamp(22px, 2vw, 30px)', lineHeight: 1.4, marginBottom: 28, color: 'var(--ink)', letterSpacing: '-0.01em', fontFamily: 'var(--display)', fontWeight: 500, textWrap: 'pretty' }}>
+            <p suppressHydrationWarning className="reveal" data-d="2" style={{ fontSize: 'clamp(22px, 2vw, 30px)', lineHeight: 1.4, marginBottom: 28, color: 'var(--ink)', letterSpacing: '-0.01em', fontFamily: 'var(--display)', fontWeight: 500, textWrap: 'pretty' }}>
               <T id="about.hero.p1" vars={{ n: yrs }} />
             </p>
             <p className="reveal" data-d="2" style={{ fontSize: 'clamp(22px, 2vw, 30px)', lineHeight: 1.4, marginBottom: 28, color: 'var(--ink)', letterSpacing: '-0.01em', fontFamily: 'var(--display)', fontWeight: 500, textWrap: 'pretty' }}>
@@ -165,7 +169,7 @@ function AboutClose({ onTalk }) {
 }
 
 /* ---------- Page App ---------- */
-function AboutApp() {
+export default function AboutApp() {
   const { lang, setLang } = useLang();
   usePageTitle('meta.about.title');
   useReveal();
@@ -185,4 +189,3 @@ function AboutApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<I18nProvider><AboutApp /></I18nProvider>);

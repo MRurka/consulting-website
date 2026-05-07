@@ -1,0 +1,19 @@
+{
+  "name": "michaelrurka-com",
+  "private": true,
+  "version": "1.0.0",
+  "description": "michaelrurka.com — static prerendered React site (EN + FR).",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/build.js && python3 -m http.server -d dist 8765",
+    "check-i18n": "node scripts/check-i18n.js"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0"
+  }
+}

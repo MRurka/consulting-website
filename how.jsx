@@ -1,5 +1,10 @@
 /* "How" section — dark forest block */
-function HowSection() {
+import React from 'react';
+import { useT, T } from './i18n.jsx';
+import { yearsSince } from './components.jsx';
+import { HomeLogos } from './logos.jsx';
+
+export function HowSection() {
   const t = useT();
   const yrs = yearsSince(2013);
   return (
@@ -19,7 +24,7 @@ function HowSection() {
           }}>
             <T id="home.how.heading" />
           </h2>
-          <p style={{
+          <p suppressHydrationWarning style={{
             fontSize: 'clamp(20px, 1.7vw, 26px)', lineHeight: 1.5,
             color: 'rgba(244,241,236,0.85)', maxWidth: '52ch', margin: '0 auto 56px', textWrap: 'pretty',
           }}>
@@ -37,4 +42,3 @@ function HowSection() {
   );
 }
 
-window.HowSection = HowSection;
