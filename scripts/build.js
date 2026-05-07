@@ -28,14 +28,16 @@ const LANGS = ['en', 'fr'];
 const DEFAULT_LANG = 'en';
 
 // Each page renders the same React tree via I18nProvider with a per-lang dict.
-// `htmlBase` is the bare filename — EN serves at /<htmlBase>, FR at /fr/<htmlBase>.
+// `urlSlug` becomes the URL path — '' for the home page (served at /),
+// 'about' → /about/, etc. FR mirrors live at /fr/<urlSlug>/.
+// Output is dist/<urlSlug>/index.html (or dist/index.html for home).
 // `ld` is the JSON-LD slug used to switch between Person/Article/etc. schemas.
 const PAGES = [
-  { slug: 'home',      module: 'app.jsx',                  entry: 'entries/home.jsx',       htmlBase: 'index.html',                titleKey: 'meta.home.title',      descKey: 'meta.home.description',      ld: 'home' },
-  { slug: 'about',     module: 'about.jsx',                entry: 'entries/about.jsx',      htmlBase: 'about.html',                titleKey: 'meta.about.title',     descKey: 'meta.about.description',     ld: 'about' },
-  { slug: 'services',  module: 'services.jsx',             entry: 'entries/services.jsx',   htmlBase: 'services.html',             titleKey: 'meta.services.title',  descKey: 'meta.services.description',  ld: 'service' },
-  { slug: 'book',      module: 'book.jsx',                 entry: 'entries/book.jsx',       htmlBase: 'book.html',                 titleKey: 'meta.book.title',      descKey: 'meta.book.description',      ld: 'book' },
-  { slug: 'caseStudy', module: 'case-study-company-x.jsx', entry: 'entries/case-study.jsx', htmlBase: 'case-study-company-x.html', titleKey: 'meta.cs.title', descKey: 'meta.cs.description', ld: 'caseStudy' },
+  { slug: 'home',      module: 'app.jsx',                  entry: 'entries/home.jsx',       urlSlug: '',                       titleKey: 'meta.home.title',      descKey: 'meta.home.description',      ld: 'home' },
+  { slug: 'about',     module: 'about.jsx',                entry: 'entries/about.jsx',      urlSlug: 'about',                  titleKey: 'meta.about.title',     descKey: 'meta.about.description',     ld: 'about' },
+  { slug: 'services',  module: 'services.jsx',             entry: 'entries/services.jsx',   urlSlug: 'services',               titleKey: 'meta.services.title',  descKey: 'meta.services.description',  ld: 'service' },
+  { slug: 'book',      module: 'book.jsx',                 entry: 'entries/book.jsx',       urlSlug: 'book',                   titleKey: 'meta.book.title',      descKey: 'meta.book.description',      ld: 'book' },
+  { slug: 'caseStudy', module: 'case-study-company-x.jsx', entry: 'entries/case-study.jsx', urlSlug: 'case-study-company-x',   titleKey: 'meta.cs.title',        descKey: 'meta.cs.description',        ld: 'caseStudy' },
 ];
 
 /* ------------------ helpers ------------------ */
@@ -65,14 +67,16 @@ function safeJsonScript(obj) {
     .replace(/\u2029/g, '\\u2029');
 }
 
-function urlForPage(htmlBase, lang) {
-  const prefix = lang === DEFAULT_LANG ? '' : `/${lang}`;
-  return `${prefix}/${htmlBase}`;
+function urlForPage(urlSlug, lang) {
+  const langPrefix = lang === DEFAULT_LANG ? '' : `/${lang}`;
+  // Home: just '/' or '/fr/'. Other pages: '/about/' or '/fr/about/'.
+  if (!urlSlug) return langPrefix + '/';
+  return `${langPrefix}/${urlSlug}/`;
 }
 
 /* ------------------ JSON-LD per page ------------------ */
 function jsonLdFor(page, lang, dict) {
-  const url = SITE_URL + urlForPage(page.htmlBase, lang);
+  const url = SITE_URL + urlForPage(page.urlSlug, lang);
   const name = 'Michael Rurka';
   const desc = dict[page.descKey] || dict['meta.home.description'] || '';
   const sameAs = ['https://www.linkedin.com/in/michaelrurka/'];
@@ -84,7 +88,7 @@ function jsonLdFor(page, lang, dict) {
         '@context': 'https://schema.org',
         '@type': 'Person',
         name,
-        url: SITE_URL + urlForPage('index.html', lang),
+        url: SITE_URL + urlForPage('', lang),
         image,
         jobTitle: lang === 'fr' ? 'Partenaire de croissance' : "Operator's growth partner",
         sameAs,
@@ -96,7 +100,7 @@ function jsonLdFor(page, lang, dict) {
         '@context': 'https://schema.org',
         '@type': 'ProfessionalService',
         name: name + ' — Consulting',
-        url: SITE_URL + urlForPage('services.html', lang),
+        url: SITE_URL + urlForPage('services', lang),
         provider: { '@type': 'Person', name },
         areaServed: ['Canada', 'Latin America'],
         description: dict['meta.services.description'] || desc,
@@ -139,9 +143,9 @@ function jsonLdFor(page, lang, dict) {
 function renderHtml({ page, lang, dict, ssrHtml, jsBundlePath }) {
   const title = dict[page.titleKey] || 'Michael Rurka';
   const desc = dict[page.descKey] || '';
-  const canonical = SITE_URL + urlForPage(page.htmlBase, lang);
-  const altEn = SITE_URL + urlForPage(page.htmlBase, 'en');
-  const altFr = SITE_URL + urlForPage(page.htmlBase, 'fr');
+  const canonical = SITE_URL + urlForPage(page.urlSlug, lang);
+  const altEn = SITE_URL + urlForPage(page.urlSlug, 'en');
+  const altFr = SITE_URL + urlForPage(page.urlSlug, 'fr');
   const ogImage = `${SITE_URL}/assets/michael.webp`;
   const ldBlobs = jsonLdFor(page, lang, dict)
     .map(o => `<script type="application/ld+json">${safeJsonScript(o)}</script>`)
@@ -328,8 +332,8 @@ function writeSitemap() {
   for (const page of PAGES) {
     for (const lang of LANGS) {
       urls.push({
-        loc: SITE_URL + urlForPage(page.htmlBase, lang),
-        alts: LANGS.map(l => ({ hreflang: l, href: SITE_URL + urlForPage(page.htmlBase, l) })),
+        loc: SITE_URL + urlForPage(page.urlSlug, lang),
+        alts: LANGS.map(l => ({ hreflang: l, href: SITE_URL + urlForPage(page.urlSlug, l) })),
       });
     }
   }
@@ -339,7 +343,7 @@ function writeSitemap() {
 ${urls.map(u => `  <url>
     <loc>${u.loc}</loc>
 ${u.alts.map(a => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n')}
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${urlForPage(PAGES[0].htmlBase, 'en')}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${urlForPage(PAGES[0].urlSlug, 'en')}" />
   </url>`).join('\n')}
 </urlset>
 `;
@@ -365,11 +369,11 @@ ${en['about.hero.p2']} ${en['about.hero.p3']}
 
 ## Pages
 
-- [Home](${SITE_URL}/index.html): ${en['meta.home.description']}
-- [About](${SITE_URL}/about.html): ${en['meta.about.description']}
-- [Services](${SITE_URL}/services.html): ${en['meta.services.description']}
-- [Case study (Company X)](${SITE_URL}/case-study-company-x.html): ${en['meta.cs.description']}
-- [Book a call](${SITE_URL}/book.html): ${en['meta.book.description']}
+- [Home](${SITE_URL}/): ${en['meta.home.description']}
+- [About](${SITE_URL}/about/): ${en['meta.about.description']}
+- [Services](${SITE_URL}/services/): ${en['meta.services.description']}
+- [Case study (Company X)](${SITE_URL}/case-study-company-x/): ${en['meta.cs.description']}
+- [Book a call](${SITE_URL}/book/): ${en['meta.book.description']}
 
 ## Contact
 
@@ -398,10 +402,12 @@ async function main() {
     for (const lang of LANGS) {
       const ssrHtml = render(dicts[lang], lang);
       const html = renderHtml({ page, lang, dict: dicts[lang], ssrHtml, jsBundlePath });
-      const outRel = urlForPage(page.htmlBase, lang); // e.g. /about.html or /fr/about.html
-      const outPath = path.join(distDir, outRel.replace(/^\//, ''));
-      mkdirSync(path.dirname(outPath), { recursive: true });
-      writeFileSync(outPath, html);
+      const outRel = urlForPage(page.urlSlug, lang); // e.g. '/about/' or '/fr/about/'
+      // Pretty URLs: emit dist/<slug>/index.html (and the home is dist/index.html).
+      const dirRel = outRel.replace(/^\//, ''); // 'about/' or 'fr/about/' or '' for home
+      const outDir = path.join(distDir, dirRel);
+      mkdirSync(outDir, { recursive: true });
+      writeFileSync(path.join(outDir, 'index.html'), html);
       log('wrote', outRel);
     }
   }

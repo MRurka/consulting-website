@@ -93,6 +93,8 @@ export function Hero({ onTalk }) {
 /* ============ WHAT I DO ============ */
 export function WhatIDo() {
   const t = useT();
+  const { lang } = useLang();
+  const langPrefix = lang === 'fr' ? '/fr' : '';
   const keys = ['cx', 'ops', 'tech', 'growth'];
   const carouselItems = keys.map((k, i) => ({
     num: String(i + 1).padStart(2, '0'),
@@ -135,7 +137,7 @@ export function WhatIDo() {
         </div>
         <MobileCarousel items={carouselItems} ariaLabel={t('home.whatido.eyebrow')} />
         <div style={{ marginTop: 56, textAlign: 'center' }} className="reveal" data-d="3">
-          <a href="services.html" className="btn btn--ghost" style={{ borderColor: 'var(--ink)', fontSize: 15 }}>
+          <a href={`${langPrefix}/services/`} className="btn btn--ghost" style={{ borderColor: 'var(--ink)', fontSize: 15 }}>
             {t('home.whatido.cta')} <span className="arr">→</span>
           </a>
         </div>
@@ -153,6 +155,8 @@ export function WhatIDo() {
 /* ============ FEATURED CASE STUDY ============ */
 export function FeaturedCaseStudy() {
   const t = useT();
+  const { lang } = useLang();
+  const langPrefix = lang === 'fr' ? '/fr' : '';
   return (
     <section id="work">
       <div className="wrap">
@@ -163,7 +167,7 @@ export function FeaturedCaseStudy() {
           </div>
         </div>
 
-        <a href="case-study-company-x.html" className="case-card reveal" style={{
+        <a href={`${langPrefix}/case-study-company-x/`} className="case-card reveal" style={{
           display: 'grid', gridTemplateColumns: '1.05fr 1fr', gap: 0,
           border: '1px solid var(--line)', borderRadius: 10,
           overflow: 'hidden', background: 'var(--bg-2)',
@@ -237,6 +241,8 @@ function Stat({ big, small }) {
 /* ============ FOOTER ============ */
 export function Footer({ onTalk, hideCta = false }) {
   const t = useT();
+  const { lang } = useLang();
+  const langPrefix = lang === 'fr' ? '/fr' : '';
   return (
     <footer style={{ background: 'var(--ink)', color: 'var(--bg)', padding: hideCta ? '40px 0' : '120px 0 40px', position: 'relative' }}>
       <div className="wrap">
@@ -267,8 +273,8 @@ export function Footer({ onTalk, hideCta = false }) {
           <div>
             <div className="eyebrow" style={{ color: 'rgba(244,241,236,0.4)', marginBottom: 14 }}>{t('footer.col.site')}</div>
             <ul style={{ listStyle: 'none', display: 'grid', gap: 8 }}>
-              <li><a href="services.html" style={{ color: 'rgba(244,241,236,0.85)' }}>{t('nav.services')}</a></li>
-              <li><a href="about.html" style={{ color: 'rgba(244,241,236,0.85)' }}>{t('nav.about')}</a></li>
+              <li><a href={`${langPrefix}/services/`} style={{ color: 'rgba(244,241,236,0.85)' }}>{t('nav.services')}</a></li>
+              <li><a href={`${langPrefix}/about/`} style={{ color: 'rgba(244,241,236,0.85)' }}>{t('nav.about')}</a></li>
             </ul>
           </div>
           <div>

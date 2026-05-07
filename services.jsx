@@ -326,7 +326,7 @@ export default function ServicesAppRoot() {
   usePageTitle('meta.services.title');
   useReveal();
 
-  const onTalk = () => { window.location.href = 'book.html'; };
+  const onTalk = () => { window.location.href = (lang === 'fr' ? '/fr' : '') + '/book/'; };
 
   return (
     <>

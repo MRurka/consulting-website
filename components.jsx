@@ -89,22 +89,21 @@ export function LangSwitch({ lang, setLang, large = false }) {
 }
 
 /* ============ NAV ============ */
-// `lang` here is needed so links can be lang-aware: on FR pages the
-// hrefs need the /fr/ prefix. We rely on relative URLs working — every
-// page lives in either / or /fr/, so `services.html` resolves correctly
-// in both. Wordmark on non-home pages goes to the lang-correct index.
+// All internal links are root-relative with a lang prefix so they
+// resolve correctly from any URL depth (/, /about/, /fr/, /fr/about/).
 export function NavBar({ onTalk, lang, setLang, current = 'home' }) {
   const t = useT();
   const scrolled = useScrolledPast(40);
   const [open, setOpen] = useState(false);
 
+  const langPrefix = lang === 'fr' ? '/fr' : '';
   const links = [
-    { label: t('nav.services'), href: 'services.html', key: 'services' },
-    { label: t('nav.about'),    href: 'about.html',    key: 'about' },
+    { label: t('nav.services'), href: `${langPrefix}/services/`, key: 'services' },
+    { label: t('nav.about'),    href: `${langPrefix}/about/`,    key: 'about' },
   ];
 
   // Home wordmark scrolls to top; other pages link to lang-correct home.
-  const homeHref = lang === 'fr' ? '/fr/' : '/';
+  const homeHref = langPrefix + '/';
   const wordmarkProps = current === 'home'
     ? { href: '#top', onClick: (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setOpen(false); } }
     : { href: homeHref };

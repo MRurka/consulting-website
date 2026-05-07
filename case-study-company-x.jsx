@@ -417,6 +417,7 @@ function CSOutcome() {
 /* ---------- Section: Closing CTA ---------- */
 function CSClose({ onTalk }) {
   const t = useT();
+  const { lang } = useLang();
   return (
     <section style={{ padding: '0 0 140px' }}>
       <div className="wrap">
@@ -438,7 +439,7 @@ function CSClose({ onTalk }) {
             <button onClick={onTalk} className="btn" style={{ background: 'var(--bg)', color: 'var(--ink)', fontSize: 17, padding: '18px 28px' }}>
               {t('home.hero.cta')} <span className="arr">→</span>
             </button>
-            <a href="services.html" className="btn btn--ghost" style={{ borderColor: 'rgba(244,241,236,0.5)', color: 'var(--bg)', fontSize: 16, padding: '18px 24px' }}>
+            <a href={(lang === 'fr' ? '/fr' : '') + '/services/'} className="btn btn--ghost" style={{ borderColor: 'rgba(244,241,236,0.5)', color: 'var(--bg)', fontSize: 16, padding: '18px 24px' }}>
               {t('cs.close.cta_secondary')} <span className="arr">→</span>
             </a>
           </div>
@@ -457,7 +458,7 @@ export default function CaseStudyApp() {
   usePageTitle('meta.cs.title');
   useReveal();
 
-  const onTalk = () => { window.location.href = 'book.html'; };
+  const onTalk = () => { window.location.href = (lang === 'fr' ? '/fr' : '') + '/book/'; };
 
   return (
     <>

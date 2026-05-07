@@ -174,7 +174,7 @@ export default function AboutApp() {
   usePageTitle('meta.about.title');
   useReveal();
 
-  const onTalk = () => { window.location.href = 'book.html'; };
+  const onTalk = () => { window.location.href = (lang === 'fr' ? '/fr' : '') + '/book/'; };
 
   return (
     <>
